@@ -242,6 +242,15 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                 let vc = ReportProblemViewController()
                 navigationController?.pushViewController(vc, animated: true)
             }
+            else if indexPath.row == 3 {
+                let vc = TipViewController()
+                let navigationController = UINavigationController(rootViewController: vc)
+                navigationController.modalPresentationStyle = .automatic
+                navigationController.navigationBar.barTintColor = .tappedButton
+                navigationController.navigationBar.isTranslucent = false
+                navigationController.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+                present(navigationController, animated: true)
+            }
         }
     }
     
@@ -249,6 +258,5 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         return 0
     }
     
-
 }
 

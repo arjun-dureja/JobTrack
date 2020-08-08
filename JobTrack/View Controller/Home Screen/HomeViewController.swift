@@ -36,8 +36,6 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
         .rejectedBackground
     ]
     
-    static var isShortcut = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         addHeaderVC()
@@ -57,14 +55,6 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
             print("Could not fetch. \(error), \(error.userInfo)")
         }
         self.jobsSortedByDate = jobsVC.companies
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if HomeViewController.isShortcut {
-            HomeViewController.isShortcut = false
-            headerVC.addButton.sendActions(for: .touchUpInside)
-        }
     }
     
     func addHeaderVC() {

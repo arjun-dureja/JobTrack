@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		72297F7224DD01A600262784 /* ReportProblemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72297F7124DD01A500262784 /* ReportProblemViewController.swift */; };
+		72297F7D24DE414200262784 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72297F7C24DE414200262784 /* StoreKit.framework */; };
 		723A9EEF24CDFA7000072D53 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723A9EEE24CDFA7000072D53 /* AppDelegate.swift */; };
 		723A9EF124CDFA7000072D53 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723A9EF024CDFA7000072D53 /* SceneDelegate.swift */; };
 		723A9EF324CDFA7000072D53 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723A9EF224CDFA7000072D53 /* HomeViewController.swift */; };
@@ -16,6 +17,9 @@
 		723A9EFB24CDFA7200072D53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 723A9EF924CDFA7200072D53 /* LaunchScreen.storyboard */; };
 		723A9F0324CDFBBE00072D53 /* HeaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723A9F0224CDFBBE00072D53 /* HeaderViewController.swift */; };
 		723A9F0524CE017500072D53 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 723A9F0424CE017500072D53 /* FilterViewController.swift */; };
+		726B26AB24DE6468002CFAB0 /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726B26AA24DE6468002CFAB0 /* TipViewController.swift */; };
+		726B26AD24DE64C7002CFAB0 /* IAP_ProductIDs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 726B26AC24DE64C7002CFAB0 /* IAP_ProductIDs.plist */; };
+		726B26AF24DE6516002CFAB0 /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726B26AE24DE6516002CFAB0 /* IAPManager.swift */; };
 		72BC733A24D6176700FF2B22 /* JobTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733824D6176700FF2B22 /* JobTracker.xcdatamodeld */; };
 		72BC733D24D618AA00FF2B22 /* Company+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733B24D618AA00FF2B22 /* Company+CoreDataClass.swift */; };
 		72BC733E24D618AA00FF2B22 /* Company+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733C24D618AA00FF2B22 /* Company+CoreDataProperties.swift */; };
@@ -37,6 +41,7 @@
 		1D0D5FFAF1504B2A2EE30314 /* Pods-Job Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Job Tracker.release.xcconfig"; path = "Target Support Files/Pods-Job Tracker/Pods-Job Tracker.release.xcconfig"; sourceTree = "<group>"; };
 		65BC1E57FA03E1B988A0A86C /* Pods-JobTrack.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JobTrack.debug.xcconfig"; path = "Target Support Files/Pods-JobTrack/Pods-JobTrack.debug.xcconfig"; sourceTree = "<group>"; };
 		72297F7124DD01A500262784 /* ReportProblemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportProblemViewController.swift; sourceTree = "<group>"; };
+		72297F7C24DE414200262784 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		723A9EEB24CDFA7000072D53 /* JobTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JobTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		723A9EEE24CDFA7000072D53 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		723A9EF024CDFA7000072D53 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +52,9 @@
 		723A9EFC24CDFA7200072D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		723A9F0224CDFBBE00072D53 /* HeaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderViewController.swift; sourceTree = "<group>"; };
 		723A9F0424CE017500072D53 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		726B26AA24DE6468002CFAB0 /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
+		726B26AC24DE64C7002CFAB0 /* IAP_ProductIDs.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = IAP_ProductIDs.plist; sourceTree = "<group>"; };
+		726B26AE24DE6516002CFAB0 /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		72BC733924D6176700FF2B22 /* JobTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JobTracker.xcdatamodel; sourceTree = "<group>"; };
 		72BC733B24D618AA00FF2B22 /* Company+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company+CoreDataClass.swift"; sourceTree = "<group>"; };
 		72BC733C24D618AA00FF2B22 /* Company+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -70,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72297F7D24DE414200262784 /* StoreKit.framework in Frameworks */,
 				72BC734124D67C5B00FF2B22 /* CloudKit.framework in Frameworks */,
 				7647AB1A647769B5D162ADB9 /* Pods_JobTrack.framework in Frameworks */,
 			);
@@ -104,9 +113,11 @@
 				72BC733524D6170400FF2B22 /* View */,
 				72BC733624D6170700FF2B22 /* View Controller */,
 				72D8C51F24CE53520016E94B /* Factories.swift */,
+				726B26AE24DE6516002CFAB0 /* IAPManager.swift */,
 				723A9EEE24CDFA7000072D53 /* AppDelegate.swift */,
 				723A9EF024CDFA7000072D53 /* SceneDelegate.swift */,
 				72D8C52724CE89560016E94B /* JobTrack.entitlements */,
+				726B26AC24DE64C7002CFAB0 /* IAP_ProductIDs.plist */,
 				723A9EFC24CDFA7200072D53 /* Info.plist */,
 				723A9EEC24CDFA7000072D53 /* Products */,
 			);
@@ -155,6 +166,7 @@
 		72BC733F24D67C5B00FF2B22 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				72297F7C24DE414200262784 /* StoreKit.framework */,
 				72BC734024D67C5B00FF2B22 /* CloudKit.framework */,
 				B0289E8A0FFD5C26EA1B5BD2 /* Pods_JobTrack.framework */,
 			);
@@ -180,6 +192,7 @@
 				72BC734224D7B0E100FF2B22 /* CSVExportViewController.swift */,
 				72CE55D124D8CAFD004F5520 /* JobStatsViewController.swift */,
 				72297F7124DD01A500262784 /* ReportProblemViewController.swift */,
+				726B26AA24DE6468002CFAB0 /* TipViewController.swift */,
 			);
 			path = "Settings Screen";
 			sourceTree = "<group>";
@@ -255,6 +268,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				726B26AD24DE64C7002CFAB0 /* IAP_ProductIDs.plist in Resources */,
 				723A9EFB24CDFA7200072D53 /* LaunchScreen.storyboard in Resources */,
 				723A9EF824CDFA7200072D53 /* Assets.xcassets in Resources */,
 				723A9EF624CDFA7000072D53 /* Main.storyboard in Resources */,
@@ -326,6 +340,8 @@
 				723A9EF124CDFA7000072D53 /* SceneDelegate.swift in Sources */,
 				723A9F0524CE017500072D53 /* FilterViewController.swift in Sources */,
 				723A9F0324CDFBBE00072D53 /* HeaderViewController.swift in Sources */,
+				726B26AF24DE6516002CFAB0 /* IAPManager.swift in Sources */,
+				726B26AB24DE6468002CFAB0 /* TipViewController.swift in Sources */,
 				72D8C52424CE6DD00016E94B /* ApplicationStatus.swift in Sources */,
 				72D8C51E24CE2A110016E94B /* JobCollectionViewCell.swift in Sources */,
 			);
