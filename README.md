@@ -1,3 +1,3 @@
 # JobTrack
-iOS App for tracking job applications
-![App Screenshot](/Screenshots/image1.png)
+iOS App for keeping track of job applications
+![App Screenshot](/images/image1.png)
