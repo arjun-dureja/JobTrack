@@ -8,6 +8,7 @@
 
 import UIKit
 
+// Custom colors used accross app
 extension UIColor {
     static let appliedBackground = UIColor(red: 120/255, green: 167/255, blue: 86/255, alpha: 1)
     static let appliedText = UIColor(red: 51/255, green: 121/255, blue: 54/255, alpha: 1)
@@ -271,6 +272,7 @@ extension UIColor {
     }()
 }
 
+// Helper function for setting the logo image
 extension UIImageView {
     func setLogoImage(from url: String, for companyName: String) {
         guard let imageURL = URL(string: url) else { return }
@@ -278,6 +280,7 @@ extension UIImageView {
         DispatchQueue.global().async {
             guard let imageData = try? Data(contentsOf: imageURL) else {
                 DispatchQueue.main.async {
+                    // Try four domains - .com, .ca, .org, .co
                     if self.tag == 0 {
                         self.setLogoImage(from: "https://logo.clearbit.com/\(companyName.replacingOccurrences(of: " ", with: "")).org", for: companyName)
                         self.tag = 1

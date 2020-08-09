@@ -10,6 +10,7 @@ import UIKit
 
 class HeaderViewController: UIViewController {
     
+    // MARK: - Properties
     let briefcaseImage = UIImageView()
     let titleLabel = UILabel()
     let addButton = UIButton()
@@ -51,7 +52,6 @@ extension HeaderViewController {
             
             addButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5),
             addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24)
-
         ])
     }
 }

@@ -13,10 +13,12 @@ import SwiftCSVExport
 
 class CSVExportViewController: UIViewController, UINavigationBarDelegate {
 
+    //MARK: - Properties
     var webView = WKWebView()
     var companies: [Company]!
     var filePath: String!
     
+    // Called from settings VC
     func setCompanies(companies: [Company]) {
         self.companies = companies.sorted {
             $0.applicationStatus < $1.applicationStatus
@@ -30,8 +32,8 @@ class CSVExportViewController: UIViewController, UINavigationBarDelegate {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
         navigationItem.rightBarButtonItem?.tintColor = .white
 
+        // Setup webview
         webView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height))
-
 
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.scrollView.delegate = self
@@ -39,7 +41,7 @@ class CSVExportViewController: UIViewController, UINavigationBarDelegate {
         
         view.addSubview(webView)
 
-        
+        // SwiftCSVExport
         let data:NSMutableArray = NSMutableArray()
         
         let dateFormatter = DateFormatter()
@@ -78,6 +80,7 @@ class CSVExportViewController: UIViewController, UINavigationBarDelegate {
         }
     }
 
+    // Zoom webview in
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         webView.scrollView.showsHorizontalScrollIndicator = false
@@ -96,6 +99,7 @@ class CSVExportViewController: UIViewController, UINavigationBarDelegate {
     }
 }
 
+// MARK: - UIScrollViewDelegate
 extension CSVExportViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.contentOffset.x = 0.0

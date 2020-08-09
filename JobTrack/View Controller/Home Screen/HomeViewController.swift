@@ -10,6 +10,9 @@ import UIKit
 
 class HomeViewController: UIViewController, UIPopoverPresentationControllerDelegate {
 
+    // MARK: - Properties
+    
+    // Core Data context
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     let headerVC = HeaderViewController()
@@ -45,6 +48,8 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Fetch companies from core data and sort by date
         do {
             jobsVC.companies = try context.fetch(Company.fetchRequest())
             jobsVC.companies = jobsVC.companies.sorted {
@@ -54,9 +59,12 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
+        
+        // Save a copy of companies
         self.jobsSortedByDate = jobsVC.companies
     }
     
+    // Add header VC as child
     func addHeaderVC() {
         addChild(headerVC)
         view.addSubview(headerVC.view)
@@ -75,6 +83,7 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
         ])
     }
     
+    // Add filter VC as chidl
     func addFilterVC() {
         addChild(filterVC)
         view.addSubview(filterVC.view)
@@ -89,6 +98,7 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
         setupStatusPicker()
     }
     
+    // Picker for filter VC
     func setupStatusPicker() {
         let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 35))
         toolBar.barStyle = UIBarStyle.default
@@ -109,6 +119,7 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
         filterVC.statusField.inputView = statusPickerView
     }
     
+    // Toolbar done button tapped in filter VC
     @objc func doneTapped() {
         self.filterVC.statusField.resignFirstResponder()
     }
@@ -123,6 +134,7 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
         ])
     }
     
+    // Add jobs VC as child
     func addJobsVC() {
         addChild(jobsVC)
         view.addSubview(jobsVC.view)
@@ -144,9 +156,10 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
     }
 }
 
-// MARK: Add Job Delegate
+// MARK: - Add Job Delegate
 extension HomeViewController: AddJobDelegate {
     
+    // Function called when the top right Add Button is tapped
     @objc func addTapped(){
         let vc = AddJobViewController()
         vc.jobDelegate = self
@@ -160,6 +173,7 @@ extension HomeViewController: AddJobDelegate {
         present(vc, animated: true)
     }
     
+    // Function called when the Add Job button is tapped
     func addButtonTapped(companyName: String, jobPosition: String, applicationStatus: ApplicationStatus) {
         let company = Company(context: self.context)
         company.companyName = companyName
@@ -185,14 +199,16 @@ extension HomeViewController: AddJobDelegate {
         self.jobsSortedByDate = jobsVC.companies
     }
     
+    // Unused delegate function - used in Jobs VC
     func saveButtonTapped(company: Company) {
         return
     }
 }
 
-// MARK: Search Bar Delegate
+// MARK: - Search Bar Delegate
 extension HomeViewController: UISearchBarDelegate {
     
+    // When user taps search bar
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         for button in filterVC.filterButtons {
             button.setTitleColor(.semanticFilterText, for: .normal)
@@ -210,6 +226,7 @@ extension HomeViewController: UISearchBarDelegate {
         jobsVC.jobsCollectionView.reloadData()
     }
     
+    // When user taps search button in keyboard
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
@@ -219,6 +236,7 @@ extension HomeViewController: UISearchBarDelegate {
         
     }
     
+    // Search for results as user types
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         jobsVC.companies = jobsSortedByDate.filter {
             $0.companyName!.lowercased().hasPrefix(searchText.lowercased())
@@ -233,9 +251,10 @@ extension HomeViewController: UISearchBarDelegate {
     
 }
 
-// MARK: Filter Buttons Tapped
+// MARK: - Filter Buttons Tapped, Picker View Delegate
 extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
+    // When user taps one of the filter buttons
     @objc func filterButtonTapped(_ sender: UIButton) {
         filterVC.searchBar.resignFirstResponder()
         filterVC.searchBar.text = nil
@@ -256,6 +275,7 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         sender.setTitleColor(.white, for: .normal)
         sender.backgroundColor = .tappedButton
         
+        // Sort based on which button user tapped
         if !sender.isSelected {
             if sender.titleLabel?.text == "BY DATE" {
                 jobsVC.companies = jobsSortedByDate.sorted {
@@ -283,6 +303,7 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         }
     }
     
+    // User selected filter by status picker
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         filterVC.searchBar.resignFirstResponder()
         filterVC.searchBar.text = nil
@@ -306,6 +327,7 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             filterVC.dateButton.sendActions(for: .touchUpInside)
         }
         
+        // Sort based on which status user selected
         switch row {
         case 0:
             jobsVC.companies = jobsSortedByDate
@@ -349,8 +371,10 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     
 }
 
-// MARK: Favorite Button Tapped
+// MARK: - Favorite Button Tapped
 extension HomeViewController: FavoriteButton {
+    
+    // When user taps the favorite button
     func favoriteButtonTapped(at indexPath: IndexPath) {
         self.jobsVC.companies[indexPath.item].isFavorite = true
         for i in 0..<jobsSortedByDate.count {
@@ -361,6 +385,7 @@ extension HomeViewController: FavoriteButton {
         }
     }
     
+    // When user taps the favorite button to un-favorite
     func favoriteButtonUnTapped(at indexPath: IndexPath) {
         self.jobsVC.companies[indexPath.item].isFavorite = false
         for i in 0..<jobsSortedByDate.count {
@@ -374,12 +399,14 @@ extension HomeViewController: FavoriteButton {
     
 }
 
-// MARK: Delete or Edit Button Delegate
+// MARK: - Delete or Edit Button Delegate
 extension HomeViewController: DeleteButtonDelegate, EditJobDelegate {
     
+    // User deleted a job
     func deleteTapped(at company: Company) {
         self.context.delete(company)
         
+        // Save core data context
         do {
             try self.context.save()
         }
@@ -387,16 +414,16 @@ extension HomeViewController: DeleteButtonDelegate, EditJobDelegate {
             print(error)
         }
         
+        // Remove locally
         for i in 0..<jobsSortedByDate.count {
             if jobsSortedByDate[i].dateAdded == company.dateAdded {
                 jobsSortedByDate.remove(at: i)
                 break
             }
         }
-        
-   
     }
     
+    // User finished editing a job
     func jobEdited(company: Company) {
         for i in 0..<jobsSortedByDate.count {
             if jobsSortedByDate[i].dateAdded == company.dateAdded {

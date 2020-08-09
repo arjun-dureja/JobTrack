@@ -8,10 +8,12 @@
 
 import StoreKit
 
-class IAPManager: NSObject {
+class IAPManager: NSObject, SKPaymentTransactionObserver {
     
+    // MARK: - Properties
     static let shared = IAPManager()
     var onReceiveProductsHandler: ((Result<[SKProduct], IAPManagerError>) -> Void)?
+    var onBuyProductHandler: ((Result<Bool, Error>) -> Void)?
     
     private override init() {
         super.init()
@@ -64,6 +66,54 @@ class IAPManager: NSObject {
         return formatter.string(from: product.price)
     }
     
+    func startObserving() {
+        SKPaymentQueue.default().add(self)
+    }
+    
+    
+    func stopObserving() {
+        SKPaymentQueue.default().remove(self)
+    }
+    
+    func canMakePayments() -> Bool {
+        return SKPaymentQueue.canMakePayments()
+    }
+    
+    func buy(product: SKProduct, withHandler handler: @escaping ((_ result: Result<Bool, Error>) -> Void)) {
+        let payment = SKPayment(product: product)
+        SKPaymentQueue.default().add(payment)
+        
+        // Keep the completion handler.
+        onBuyProductHandler = handler
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        
+        transactions.forEach { (transaction) in
+            switch transaction.transactionState {
+            case .purchased:
+                onBuyProductHandler?(.success(true))
+                SKPaymentQueue.default().finishTransaction(transaction)
+            case .restored:
+                break
+                
+            case .failed:
+                if let error = transaction.error as? SKError {
+                    if error.code != .paymentCancelled {
+                        onBuyProductHandler?(.failure(error))
+                    } else {
+                        onBuyProductHandler?(.failure(IAPManagerError.paymentWasCancelled))
+                    }
+                    print("IAP Error:", error.localizedDescription)
+                }
+                SKPaymentQueue.default().finishTransaction(transaction)
+                
+            case .deferred, .purchasing: break
+            @unknown default: break
+            }
+        }
+    }
+    
 }
 
 extension IAPManager.IAPManagerError: LocalizedError {
@@ -82,7 +132,7 @@ extension IAPManager: SKProductsRequestDelegate {
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         // Get the available products contained in the response.
         let products = response.products
-     
+        
         // Check if there are any products available.
         if products.count > 0 {
             // Call the following handler passing the received products.
@@ -99,3 +149,4 @@ extension IAPManager: SKProductsRequestDelegate {
     
     
 }
+

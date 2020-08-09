@@ -12,6 +12,7 @@ import LinkPresentation
 
 class JobStatsViewController: UIViewController {
     
+    // MARK: - Properties
     var companies: [Company]!
     var offerCount: Int = 0
     var onSiteCount: Int = 0
@@ -54,7 +55,7 @@ class JobStatsViewController: UIViewController {
         }
     }
     
-    
+    // Called from settings VC
     func setCompanies(companies: [Company]) {
         self.companies = companies
         
@@ -74,6 +75,7 @@ class JobStatsViewController: UIViewController {
         }
     }
     
+    // MARK: - Style and Layout
     func style() {
         pieChartView.translatesAutoresizingMaskIntoConstraints = false
         barChartView.translatesAutoresizingMaskIntoConstraints = false
@@ -156,7 +158,6 @@ class JobStatsViewController: UIViewController {
     }
     
     func layout() {
-        
         pieChartView.addSubview(pieChart)
         pieChartView.addSubview(pieChartTitle)
         pieChartView.addSubview(pieChartDownloadBtn)
@@ -199,6 +200,7 @@ class JobStatsViewController: UIViewController {
         ])
     }
     
+    // Chart download tapped
     @objc func pieChartDownloadTapped() {
         chartToShare = 0
         let renderer = UIGraphicsImageRenderer(size: self.pieChart.bounds.size)
@@ -231,6 +233,7 @@ class JobStatsViewController: UIViewController {
 
 }
 
+// MARK: - UIActivityItemSource
 extension JobStatsViewController: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return ""
@@ -240,6 +243,7 @@ extension JobStatsViewController: UIActivityItemSource {
         return nil
     }
 
+    // Show chart as image in share thumbnail
     func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
         let metadata = LPLinkMetadata()
         var chartImage = UIImage()

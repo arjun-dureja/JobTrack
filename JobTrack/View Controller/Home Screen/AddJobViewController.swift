@@ -10,6 +10,7 @@ import UIKit
 
 class AddJobViewController: UIViewController {
     
+    // MARK: - Properties
     let scrollView = UIScrollView()
     
     let addJobButton = UIButton(type: .system)
@@ -51,6 +52,7 @@ class AddJobViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         
+        // Add targets to text fields
         [companyNameField, positionField].forEach({
             $0.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
         })
@@ -60,12 +62,14 @@ class AddJobViewController: UIViewController {
         style()
         layout()
         
+        // Wait 0.25 seconds before showing keyboard
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.25) {
             self.companyNameField.becomeFirstResponder()
         }
 
     }
     
+    // Accomodate landscape mode by enabling a scrollview
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         scrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height*2)
@@ -79,6 +83,7 @@ class AddJobViewController: UIViewController {
         
     }
     
+    // Function called only if user is editing a job
     func enableEditing(for company: Company) {
         self.companyToEdit = company
         companyNameField.text = company.companyName
@@ -115,6 +120,7 @@ class AddJobViewController: UIViewController {
         button.layer.cornerRadius = 8
     }
     
+    //MARK: - Style and Layout
     func style() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -271,12 +277,16 @@ class AddJobViewController: UIViewController {
     }
 }
 
+// MARK: - AddJobDelegate
 protocol AddJobDelegate {
     func addButtonTapped(companyName: String, jobPosition: String, applicationStatus: ApplicationStatus)
     func saveButtonTapped(company: Company)
 }
 
+// MARK: - Selector functions
 extension AddJobViewController {
+    
+    // Only enable add job button if fields are filled
     @objc func editingChanged(_ textField: UITextField) {
         
         guard
@@ -293,10 +303,12 @@ extension AddJobViewController {
         addJobButton.isEnabled = true
     }
     
+    // Set logo once user finishes adding company
     @objc func companyEditingFinished(_ sender: UITextField) {
         self.logoImageView.setLogoImage(from: "https://logo.clearbit.com/\(sender.text!.replacingOccurrences(of: " ", with: "")).com", for: self.companyNameField.text!)
     }
     
+    // User taps add job button
     @objc func addTapped() {
         if !isEditingEnabled {
             jobDelegate.addButtonTapped(companyName: companyNameField.text!, jobPosition: positionField.text!, applicationStatus: ApplicationStatus(rawValue: applicationStatusField.text!.uppercased())!)
@@ -323,6 +335,7 @@ extension AddJobViewController {
     }
 }
 
+// MARK: - UITextFieldDelegate
 extension AddJobViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == companyNameField {
@@ -334,6 +347,7 @@ extension AddJobViewController: UITextFieldDelegate {
     }
 }
 
+// MARK: - UIPickerViewDelegate
 extension AddJobViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1

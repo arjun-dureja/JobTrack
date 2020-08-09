@@ -10,6 +10,7 @@ import UIKit
 
 class FilterViewController: UIViewController {
     
+    // MARK: - Properties
     let searchBar = UISearchBar()
     
     let topFilterStackView = UIStackView()
@@ -30,13 +31,14 @@ class FilterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Filter buttons array to easily access all of them
         filterButtons = [
             dateButton,
             byStatusButton,
             aToZButton,
             favoritesButton
         ]
-        
+
         style()
         layout()
     }
@@ -45,6 +47,7 @@ class FilterViewController: UIViewController {
 
 extension FilterViewController {
     
+    // Fix colors when user activates or deactivated dark mode
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         

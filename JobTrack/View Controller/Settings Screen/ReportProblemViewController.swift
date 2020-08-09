@@ -11,6 +11,7 @@ import MessageUI
 
 class ReportProblemViewController: UIViewController {
     
+    // MARK: - Properties
     let descriptionLabel = UILabel()
     let textView = UITextView()
     let sendButton = UIButton(type: .system)
@@ -24,6 +25,7 @@ class ReportProblemViewController: UIViewController {
         layout()
     }
     
+    // MARK: - Style and Layout
     func style() {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.text = "Feel free to report bugs or leave any feedback here!"
@@ -92,6 +94,7 @@ class ReportProblemViewController: UIViewController {
     }
 }
 
+// MARK: - UITextViewDelegate, MFMailComposeViewControllerDelegate
 extension ReportProblemViewController: UITextViewDelegate, MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         

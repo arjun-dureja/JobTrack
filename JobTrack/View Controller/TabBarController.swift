@@ -15,6 +15,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         self.delegate = self
     }
     
+    // Called when a tabbar tab is selected
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         guard let tabViewControllers = tabBarController.viewControllers, let toIndex = tabViewControllers.firstIndex(of: viewController) else {
             return false
@@ -23,6 +24,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         return true
     }
 
+    // Tab bar transition
     func animateToTab(toIndex: Int) {
         guard let tabViewControllers = viewControllers,
             let selectedVC = selectedViewController else { return }

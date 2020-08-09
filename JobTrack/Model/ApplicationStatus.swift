@@ -30,6 +30,7 @@ enum ApplicationStatus: String, Comparable {
         }
     }
     
+    // Functions for sorting by status
     static func ==(lhs: ApplicationStatus, rhs: ApplicationStatus) -> Bool {
         return lhs.sortOrder == rhs.sortOrder
     }

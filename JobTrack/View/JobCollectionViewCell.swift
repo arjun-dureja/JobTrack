@@ -10,6 +10,8 @@ import UIKit
 
 class JobCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    
     let logoView = UIView()
     let logoImageView = UIImageView()
     let companyNameLabel = UILabel()
@@ -23,6 +25,8 @@ class JobCollectionViewCell: UICollectionViewCell {
     var indexPath: IndexPath!
     var favoriteDelegate: FavoriteButtonDelegate!
 
+    // MARK: - Init
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.cornerRadius = 10
@@ -31,6 +35,7 @@ class JobCollectionViewCell: UICollectionViewCell {
         layout()
     }
     
+    // Set colors for all UI
     func updateColors(for company: Company) {
         switch company.applicationStatus {
             
@@ -66,6 +71,7 @@ class JobCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    // If user changed to dark mode
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         
@@ -73,6 +79,7 @@ class JobCollectionViewCell: UICollectionViewCell {
         
     }
     
+    // Function called from parent VC
     func setCompany(_ company: Company) {
         self.company = company
         
@@ -100,6 +107,8 @@ class JobCollectionViewCell: UICollectionViewCell {
     }
 
 }
+
+// MARK: - Style and Layout
 
 extension JobCollectionViewCell {
     
@@ -179,6 +188,7 @@ extension JobCollectionViewCell {
         
     }
     
+    // Favorite button tapped
     @objc func favoriteTapped(_ sender: UIButton) {
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
@@ -198,6 +208,8 @@ extension JobCollectionViewCell {
 
     }
 }
+
+// MARK: - Favorite Button Tapped Protocol
 
 protocol FavoriteButtonDelegate {
     

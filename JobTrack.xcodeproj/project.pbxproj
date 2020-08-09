@@ -20,6 +20,7 @@
 		726B26AB24DE6468002CFAB0 /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726B26AA24DE6468002CFAB0 /* TipViewController.swift */; };
 		726B26AD24DE64C7002CFAB0 /* IAP_ProductIDs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 726B26AC24DE64C7002CFAB0 /* IAP_ProductIDs.plist */; };
 		726B26AF24DE6516002CFAB0 /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726B26AE24DE6516002CFAB0 /* IAPManager.swift */; };
+		726B26B324DF3E75002CFAB0 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726B26B224DF3E75002CFAB0 /* LaunchViewController.swift */; };
 		72BC733A24D6176700FF2B22 /* JobTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733824D6176700FF2B22 /* JobTracker.xcdatamodeld */; };
 		72BC733D24D618AA00FF2B22 /* Company+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733B24D618AA00FF2B22 /* Company+CoreDataClass.swift */; };
 		72BC733E24D618AA00FF2B22 /* Company+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733C24D618AA00FF2B22 /* Company+CoreDataProperties.swift */; };
@@ -55,6 +56,7 @@
 		726B26AA24DE6468002CFAB0 /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
 		726B26AC24DE64C7002CFAB0 /* IAP_ProductIDs.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = IAP_ProductIDs.plist; sourceTree = "<group>"; };
 		726B26AE24DE6516002CFAB0 /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
+		726B26B224DF3E75002CFAB0 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		72BC733924D6176700FF2B22 /* JobTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JobTracker.xcdatamodel; sourceTree = "<group>"; };
 		72BC733B24D618AA00FF2B22 /* Company+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company+CoreDataClass.swift"; sourceTree = "<group>"; };
 		72BC733C24D618AA00FF2B22 /* Company+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				72BC734624D8C67300FF2B22 /* TabBarController.swift */,
+				726B26B224DF3E75002CFAB0 /* LaunchViewController.swift */,
 				72BC734424D8C55400FF2B22 /* Home Screen */,
 				72BC734524D8C55D00FF2B22 /* Settings Screen */,
 			);
@@ -343,6 +346,7 @@
 				726B26AF24DE6516002CFAB0 /* IAPManager.swift in Sources */,
 				726B26AB24DE6468002CFAB0 /* TipViewController.swift in Sources */,
 				72D8C52424CE6DD00016E94B /* ApplicationStatus.swift in Sources */,
+				726B26B324DF3E75002CFAB0 /* LaunchViewController.swift in Sources */,
 				72D8C51E24CE2A110016E94B /* JobCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

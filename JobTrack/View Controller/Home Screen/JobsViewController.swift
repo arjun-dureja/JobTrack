@@ -9,6 +9,8 @@
 import UIKit
 
 class JobsViewController: UIViewController {
+    
+    // MARK: - Properties
     var selectIndex: Int = -1
     var jobsCollectionView: UICollectionView!
     let cvLayout = UICollectionViewFlowLayout()
@@ -40,6 +42,7 @@ class JobsViewController: UIViewController {
     }
 }
 
+// MARK: - Style and Layout
 extension JobsViewController {
     func style() {
         cvLayout.sectionInset = UIEdgeInsets(top: 2, left: 22.5, bottom: 15, right: 22.5)
@@ -63,6 +66,7 @@ extension JobsViewController {
     }
 }
 
+//MARK: - UIColletionViewDelegate, UICollectionViewDataSource
 extension JobsViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, FavoriteButtonDelegate {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -87,8 +91,11 @@ extension JobsViewController: UICollectionViewDelegate, UICollectionViewDataSour
         delegate.favoriteButtonUnTapped(at: indexPath)
     }
 
+    // Add delete and edit contextual buttons
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
+            
+            // Edit button
             let edit = UIAction(title: "Edit", image: UIImage(systemName: "square.and.pencil")) { action in
                 let vc = AddJobViewController()
                 vc.enableEditing(for: self.companies[indexPath.item])
@@ -97,6 +104,7 @@ extension JobsViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 self.present(vc, animated: true)
             }
 
+            // Delete button
             let delete = UIAction(title: "Delete", image: UIImage(systemName: "trash"), attributes: .destructive) { [weak self] _ in
                 let ac = UIAlertController(title: "Are you sure you want to delete this job?", message: nil, preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
@@ -117,6 +125,9 @@ extension JobsViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         
+        // Animate jobs when user starts app
+        
+        // Only animate the ones that fit on screen to avoid issues
         let jobsToAnimate = Int(collectionView.frame.height / cell.frame.height)
         
         if collectionView.numberOfItems(inSection: 0) < jobsToAnimate {
@@ -141,6 +152,7 @@ extension JobsViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
 }
 
+//MARK: - AddJobDelegate
 extension JobsViewController: AddJobDelegate {
     func addButtonTapped(companyName: String, jobPosition: String, applicationStatus: ApplicationStatus) {
         return
@@ -158,6 +170,7 @@ extension JobsViewController: AddJobDelegate {
     }
 }
 
+// MARK: - Protocols
 protocol FavoriteButton {
     
     func favoriteButtonTapped(at indexPath: IndexPath)

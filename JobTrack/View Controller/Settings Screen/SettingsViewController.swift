@@ -7,13 +7,17 @@
 //
 
 import UIKit
+import StoreKit
 
 class SettingsViewController: UIViewController {
+    
+    // MARK: - Properties
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var companies = [Company]()
     let jobsTableView = UITableView()
     var jobsTableViewTitle = UILabel()
     
+    // Data for jobs tableview
     let jobsTableViewSettings = ["View Stats", "Export Jobs to CSV", "Delete All Jobs"]
     let jobsTableViewImages = ["chart.pie.fill", "table.fill", "trash.fill"]
     let jobsTableViewColors: [UIColor] = [.onSiteBackground, .csvGreen, .red]
@@ -21,6 +25,7 @@ class SettingsViewController: UIViewController {
     let supportTableView = UITableView()
     var supportTableViewTitle = UILabel()
     
+    // Data for support tableview
     let supportTableViewSettings = ["Report a Problem", "Privacy Policy", "Rate", "Leave a Tip"]
     let supportTableViewImages = ["text.bubble.fill", "lock.shield.fill", "star.fill", "dollarsign.circle.fill"]
     let supportTableViewColors: [UIColor] = [.phoneScreenBackground, .darkGray, .offerBackground, .csvGreen]
@@ -28,6 +33,8 @@ class SettingsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Get companies from core data
         do {
             companies = try context.fetch(Company.fetchRequest())
         } catch let error as NSError {
@@ -43,12 +50,14 @@ class SettingsViewController: UIViewController {
         title = "Settings"
         view.backgroundColor = .semanticSettingsBackground
         
+        // Disable job cell animation if user taps settings before animation is finished
         JobsViewController.animatedCells = Int.max
         
         style()
         layout()
     }
     
+    //MARK: - Style and Layout
     func styleTableView(for tableView: UITableView) {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
@@ -108,18 +117,21 @@ class SettingsViewController: UIViewController {
         ])
     }
     
+    // View stats button pressed
     func viewStats() {
         let vc = JobStatsViewController()
         vc.setCompanies(companies: companies)
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    // Export to CSV button pressed
     func exportToCSV() {
         let vc = CSVExportViewController()
         vc.setCompanies(companies: companies)
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    // Delete all data button pressed
     func deleteAllData() {
         let ac = UIAlertController(title: "Are you sure you want to delete all data? This cannot be undone.", message: nil, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
@@ -145,7 +157,9 @@ class SettingsViewController: UIViewController {
     
 }
 
+// MARK: - UITableViewDelegate
 extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView.tag == 0 {
             return jobsTableViewSettings.count
@@ -158,6 +172,8 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
         cell.backgroundColor = .semanticSettingsTableview
         cell.accessoryType = .disclosureIndicator
+        
+        // Jobs tableview cells
         if tableView.tag == 0 {
             cell.textLabel?.text = jobsTableViewSettings[indexPath.row]
             cell.imageView?.image = UIImage(systemName: jobsTableViewImages[indexPath.row])
@@ -172,7 +188,9 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                 cell.layer.cornerRadius = 10
                 cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             }
-        } else {
+        }
+        // Support tableview cells
+        else {
             cell.textLabel?.text = supportTableViewSettings[indexPath.row]
             cell.imageView?.image = UIImage(systemName: supportTableViewImages[indexPath.row])
             cell.imageView?.tintColor = supportTableViewColors[indexPath.row]
@@ -201,11 +219,15 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        // Jobs tableview cell tapped
         if tableView.tag == 0 {
             var acTitle: String!
             var acMessage: String!
             
+            // View Stats Cell
             if indexPath.row == 0 {
                 if companies.count == 0 {
                     acTitle = "No jobs to view"
@@ -215,6 +237,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                     return
                 }
             }
+            // Export to CSV Cell
             else if indexPath.row == 1 {
                 if companies.count == 0 {
                     acTitle = "No jobs to export"
@@ -224,6 +247,7 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                     return
                 }
             }
+            // Delete Data Cell
             else if indexPath.row == 2 {
                 if companies.count == 0 {
                     acTitle = "No jobs to delete"
@@ -237,11 +261,24 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             ac.addAction(UIAlertAction(title: "OK", style: .default))
             present(ac, animated: true)
         }
+        // Support tableview cell tapped
         else  {
+            // Report a Problem Cell
             if indexPath.row == 0 {
                 let vc = ReportProblemViewController()
                 navigationController?.pushViewController(vc, animated: true)
             }
+            // Privacy Policy Cell
+            else if indexPath.row == 1 {
+                if let url = URL(string: "https://jobtrack.flycricket.io/privacy.html") {
+                    UIApplication.shared.open(url)
+                }
+            }
+            // Rate Cell
+            else if indexPath.row == 2 {
+                SKStoreReviewController.requestReview()
+            }
+            // Leave a Tip Cell
             else if indexPath.row == 3 {
                 let vc = TipViewController()
                 let navigationController = UINavigationController(rootViewController: vc)
