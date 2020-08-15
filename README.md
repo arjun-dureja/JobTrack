@@ -19,3 +19,5 @@ JobTrack is the perfect app for keeping track of your job applications. With Job
 - Sync data between devices with iCloud
 
 ## Screenshots
+![iPhone Screenshots](/images/screenshot-one.png)
+![iPhone Screenshots](/images/screenshots-two.png)
