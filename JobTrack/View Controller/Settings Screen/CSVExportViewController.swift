@@ -55,8 +55,12 @@ class CSVExportViewController: UIViewController, UINavigationBarDelegate {
         for company in companies {
             let job: NSMutableDictionary = NSMutableDictionary()
             job.setObject(count, forKey: "Entry" as NSCopying)
-            job.setObject(company.companyName!, forKey: "Company" as NSCopying)
-            job.setObject(company.jobPosition!, forKey: "Position" as NSCopying)
+            job.setObject(company.companyName!.replacingOccurrences(of: ",", with: " "), forKey: "Company" as NSCopying)
+            job.setObject(
+                company.jobPosition!.replacingOccurrences(of: ",", with: " "),
+                forKey: "Position" as NSCopying
+            )
+
             job.setObject(company.applicationStatus.rawValue, forKey: "Status" as NSCopying)
             job.setObject(dateFormatter.string(from: company.dateAdded!), forKey: "Date Added" as NSCopying)
             data.add(job)
