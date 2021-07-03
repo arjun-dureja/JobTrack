@@ -16,14 +16,14 @@ public class ImageCache {
 
     final func loadImage(companyName: String, completion: @escaping (UIImage?) -> Swift.Void) {
         utilityQueue.async {
-            if let cachedImage = ImageCache.shared.cache.object(forKey: companyName as NSString) {
+            let key = companyName.lowercased() as NSString
+            if let cachedImage = ImageCache.shared.cache.object(forKey: key) {
                 DispatchQueue.main.async {
                     print("Using a cached image for item: \(companyName)")
                     completion(cachedImage)
                 }
             }
 
-            let key = companyName.lowercased() as NSString
             let companyNameWithoutFormatting = companyName.replacingOccurrences(of: " ", with: "").lowercased()
             let urlString = "https://logo.clearbit.com/\(companyNameWithoutFormatting)"
             var domains = [".com", ".org", ".ca", ".net", ".io", ".co", ".uk", ".tech", ".network"]

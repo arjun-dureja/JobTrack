@@ -107,7 +107,7 @@ class AddJobViewController: UIViewController {
         textField.layer.borderWidth = 1.5
         textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.layer.cornerRadius = 8
-        textField.autocapitalizationType = .none
+        textField.autocapitalizationType = .words
         textField.autocorrectionType = .no
     }
 
