@@ -14,8 +14,16 @@ public class ImageCache {
     public let cache = NSCache<NSString, UIImage>()
     private let utilityQueue = DispatchQueue.global(qos: .utility)
 
-    final func loadImage(companyName: String, addToCache: Bool, completion: @escaping (UIImage?) -> Swift.Void) {
+    final func loadImage(companyName: String, completion: @escaping (UIImage?) -> Swift.Void) {
         utilityQueue.async {
+            if let cachedImage = ImageCache.shared.cache.object(forKey: companyName as NSString) {
+                DispatchQueue.main.async {
+                    print("Using a cached image for item: \(companyName)")
+                    completion(cachedImage)
+                }
+            }
+
+            let key = companyName.lowercased() as NSString
             let companyNameWithoutFormatting = companyName.replacingOccurrences(of: " ", with: "").lowercased()
             let urlString = "https://logo.clearbit.com/\(companyNameWithoutFormatting)"
             var domains = [".com", ".org", ".ca", ".net", ".io", ".co", ".uk", ".tech", ".network"]
@@ -28,7 +36,7 @@ public class ImageCache {
                    let imageData = try? Data(contentsOf: imageUrl) {
                     guard let image = UIImage(data: imageData) else { break }
                     DispatchQueue.main.async {
-                        if addToCache { self.cache.setObject(image, forKey: companyName as NSString) }
+                        self.cache.setObject(image, forKey: key)
                         completion(image)
                     }
 
@@ -41,7 +49,8 @@ public class ImageCache {
                     systemName: "questionmark.circle.fill",
                         withConfiguration: UIImage.SymbolConfiguration(pointSize: 1)
                 ) else { return }
-                if addToCache { self.cache.setObject(image, forKey: companyName as NSString) }
+
+                self.cache.setObject(image, forKey: key)
                 completion(image)
             }
         }

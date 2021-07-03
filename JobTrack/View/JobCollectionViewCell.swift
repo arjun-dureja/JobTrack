@@ -85,24 +85,14 @@ class JobCollectionViewCell: UICollectionViewCell {
     // Function called from parent VC
     func setCompany(_ company: Company) {
         self.company = company
-
-        if let cachedImage = ImageCache.shared.cache.object(
-            forKey: company.companyName! as NSString
-        ) {
-            print("Using a cached image for item: \(company.companyName!)")
-            self.logoImageView.image = cachedImage
-        } else {
-            ImageCache.shared.loadImage(companyName: company.companyName!, addToCache: true) { (image) in
-                guard let image = image else { return }
-                UIView.transition(
-                    with: self,
-                    duration: 0.15,
-                    options: .transitionCrossDissolve,
-                    animations: { self.logoImageView.image = image }
-                )
-
-                self.logoImageView.tintColor = .black
-            }
+        ImageCache.shared.loadImage(companyName: company.companyName!) { (image) in
+            guard let image = image else { return }
+            UIView.transition(
+                with: self,
+                duration: 0.15,
+                options: .transitionCrossDissolve,
+                animations: { self.logoImageView.image = image }
+            )
         }
 
         companyNameLabel.text = company.companyName
@@ -138,6 +128,7 @@ extension JobCollectionViewCell {
         logoImageView.layer.cornerRadius = 32.5
         logoImageView.clipsToBounds = true
         logoImageView.layer.borderWidth = 2.5
+        logoImageView.tintColor = .black
 
         logoView.addSubview(logoImageView)
 
