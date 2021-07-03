@@ -14,14 +14,18 @@ public class ImageCache {
     public let cache = NSCache<NSString, UIImage>()
     private let utilityQueue = DispatchQueue.global(qos: .utility)
 
-    final func loadImage(companyName: String, completion: @escaping (UIImage?) -> Swift.Void) {
+    final func loadImage(companyName: String, completion: @escaping (UIImage?, Bool) -> Swift.Void) {
         utilityQueue.async {
             let key = companyName.lowercased() as NSString
+
+            // Check if image exists in cache first
             if let cachedImage = ImageCache.shared.cache.object(forKey: key) {
                 DispatchQueue.main.async {
                     print("Using a cached image for item: \(companyName)")
-                    completion(cachedImage)
+                    completion(cachedImage, true)
                 }
+
+                return
             }
 
             let companyNameWithoutFormatting = companyName.replacingOccurrences(of: " ", with: "").lowercased()
@@ -37,13 +41,14 @@ public class ImageCache {
                     guard let image = UIImage(data: imageData) else { break }
                     DispatchQueue.main.async {
                         self.cache.setObject(image, forKey: key)
-                        completion(image)
+                        completion(image, false)
                     }
 
                     return
                 }
             }
 
+            // Image doesn't exist, return placeholder
             DispatchQueue.main.async {
                 guard let image = UIImage(
                     systemName: "questionmark.circle.fill",
@@ -51,7 +56,7 @@ public class ImageCache {
                 ) else { return }
 
                 self.cache.setObject(image, forKey: key)
-                completion(image)
+                completion(image, false)
             }
         }
     }

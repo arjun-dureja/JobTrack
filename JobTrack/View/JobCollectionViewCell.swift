@@ -85,14 +85,18 @@ class JobCollectionViewCell: UICollectionViewCell {
     // Function called from parent VC
     func setCompany(_ company: Company) {
         self.company = company
-        ImageCache.shared.loadImage(companyName: company.companyName!) { (image) in
+        ImageCache.shared.loadImage(companyName: company.companyName!) { (image, fromCache) in
             guard let image = image else { return }
-            UIView.transition(
-                with: self,
-                duration: 0.15,
-                options: .transitionCrossDissolve,
-                animations: { self.logoImageView.image = image }
-            )
+            if fromCache {
+                self.logoImageView.image = image
+            } else {
+                UIView.transition(
+                    with: self,
+                    duration: 0.15,
+                    options: .transitionCrossDissolve,
+                    animations: { self.logoImageView.image = image }
+                )
+            }
         }
 
         companyNameLabel.text = company.companyName
