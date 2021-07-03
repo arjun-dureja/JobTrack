@@ -10,13 +10,12 @@
 import Foundation
 import CoreData
 
-
 extension Company {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Company> {
         return NSFetchRequest<Company>(entityName: "Company")
     }
-    
+
     @NSManaged public var companyName: String?
     @NSManaged public var jobPosition: String?
     @NSManaged private var status: String?

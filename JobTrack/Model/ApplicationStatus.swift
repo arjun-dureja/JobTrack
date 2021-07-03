@@ -14,7 +14,7 @@ enum ApplicationStatus: String, Comparable {
     case onSite = "ON SITE"
     case offer = "OFFER"
     case rejected = "REJECTED"
-    
+
     private var sortOrder: Int {
         switch self {
         case .offer:
@@ -29,14 +29,14 @@ enum ApplicationStatus: String, Comparable {
             return 4
         }
     }
-    
+
     // Functions for sorting by status
-    static func ==(lhs: ApplicationStatus, rhs: ApplicationStatus) -> Bool {
+    static func == (lhs: ApplicationStatus, rhs: ApplicationStatus) -> Bool {
         return lhs.sortOrder == rhs.sortOrder
     }
-    
-    static func <(lhs: ApplicationStatus, rhs: ApplicationStatus) -> Bool {
+
+    static func < (lhs: ApplicationStatus, rhs: ApplicationStatus) -> Bool {
         return lhs.sortOrder < rhs.sortOrder
     }
-    
+
 }

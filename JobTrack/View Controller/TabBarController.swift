@@ -14,12 +14,17 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         super.viewDidLoad()
         self.delegate = self
     }
-    
+
     // Called when a tabbar tab is selected
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        guard let tabViewControllers = tabBarController.viewControllers, let toIndex = tabViewControllers.firstIndex(of: viewController) else {
+    func tabBarController(
+        _ tabBarController: UITabBarController,
+        shouldSelect viewController: UIViewController)
+    -> Bool {
+        guard let tabViewControllers = tabBarController.viewControllers,
+              let toIndex = tabViewControllers.firstIndex(of: viewController) else {
             return false
         }
+
         animateToTab(toIndex: toIndex)
         return true
     }
@@ -33,7 +38,6 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
             let toView = tabViewControllers[toIndex].view,
             let fromIndex = tabViewControllers.firstIndex(of: selectedVC),
             fromIndex != toIndex else { return }
-
 
         // Add the toView to the tab bar view
         fromView.superview?.addSubview(toView)
@@ -57,12 +61,12 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
                         fromView.center = CGPoint(x: fromView.center.x - offset, y: fromView.center.y)
                         toView.center = CGPoint(x: toView.center.x - offset, y: toView.center.y)
 
-        }, completion: { finished in
+        }, completion: { _ in
             // Remove the old view from the tabbar view.
             fromView.removeFromSuperview()
             self.selectedIndex = toIndex
             self.view.isUserInteractionEnabled = true
         })
     }
-    
+
 }

@@ -32,25 +32,25 @@ public enum DividerType: String {
 
 // MARK: -  Extension for NSMutableDictionary
 public extension NSMutableDictionary {
-    
+
     var hasData:Bool {
         return  self.allKeys.count > 0 && self.allValues.count > 0
     }
-    
+
     var fields: [Any] {
         guard let fields =  self.object(forKey:FieldName.fields) else {
             return []
         }
         return fields as! [Any];
     }
-    
+
     var rows: [Any] {
         guard let rows =  self.object(forKey:FieldName.rows)  else {
             return []
         }
         return rows as! [Any]
     }
-    
+
     var name: String {
         guard let name =  self.object(forKey:FieldName.name) else {
             return ""
@@ -106,11 +106,13 @@ extension String {
         if let string = value as? String {
             // Wrap around double quotes
             let doubleQuotes = "'"
-
-            let fString = doubleQuotes+"\(string)"+doubleQuotes
-            return self.length == 0 ? fString  : "\(self)\(div)  \(string)"
+            var fString = doubleQuotes+"\(string)"+doubleQuotes
+            if (self.count == 0) {
+                fString = string
+            }
+            return self.length == 0 ? fString  : "\(self)\(div)\(string)"
         } else {
-            return self.length == 0 ? "\(value)" : "\(self)\(div)  \(value)"
+            return self.length == 0 ? "\(value)" : "\(self)\(div)\(value)"
         }
     }
     

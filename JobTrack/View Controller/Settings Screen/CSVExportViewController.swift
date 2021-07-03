@@ -10,26 +10,30 @@ import UIKit
 import WebKit
 import SwiftCSVExport
 
-
 class CSVExportViewController: UIViewController, UINavigationBarDelegate {
 
-    //MARK: - Properties
+    // MARK: - Properties
     var webView = WKWebView()
     var companies: [Company]!
     var filePath: String!
-    
+
     // Called from settings VC
     func setCompanies(companies: [Company]) {
         self.companies = companies.sorted {
             $0.applicationStatus < $1.applicationStatus
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = "Export to CSV"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .action,
+            target: self,
+            action: #selector(shareTapped)
+        )
+
         navigationItem.rightBarButtonItem?.tintColor = .white
 
         // Setup webview
@@ -38,15 +42,15 @@ class CSVExportViewController: UIViewController, UINavigationBarDelegate {
         webView.translatesAutoresizingMaskIntoConstraints = false
         webView.scrollView.delegate = self
         webView.backgroundColor = .semanticSettingsBackground
-        
+
         view.addSubview(webView)
 
         // SwiftCSVExport
-        let data:NSMutableArray = NSMutableArray()
-        
+        let data: NSMutableArray = NSMutableArray()
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
-        
+
         var count = 1
         for company in companies {
             let job: NSMutableDictionary = NSMutableDictionary()
@@ -58,17 +62,17 @@ class CSVExportViewController: UIViewController, UINavigationBarDelegate {
             data.add(job)
             count += 1
         }
-        
+
         let header = ["Entry", "Company", "Position", "Status", "Date Added"]
-        
+
         let writeCSVObj = CSV()
         writeCSVObj.rows = data
         writeCSVObj.delimiter = DividerType.comma.rawValue
         writeCSVObj.fields = header as NSArray
-        
+
         dateFormatter.dateFormat = "MM-dd-yyyy"
         writeCSVObj.name = "Job_Tracker_\(dateFormatter.string(from: Date()))"
-        
+
         let output = CSVExport.export(writeCSVObj)
         if output.result.isSuccess {
             guard let filePath = output.filePath else {
@@ -87,12 +91,12 @@ class CSVExportViewController: UIViewController, UINavigationBarDelegate {
         webView.scrollView.setZoomScale(0.82, animated: false)
         webView.scrollView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
-    
+
     @objc func shareTapped() {
         let items = [URL(fileURLWithPath: filePath)]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         present(ac, animated: true)
-        
+
         if let popOver = ac.popoverPresentationController {
             popOver.barButtonItem = navigationItem.rightBarButtonItem
         }
