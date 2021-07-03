@@ -274,61 +274,40 @@ extension UIColor {
 
 // Helper function for setting the logo image
 extension UIImageView {
-    func setLogoImage(from url: String, for companyName: String) {
-        guard let imageURL = URL(string: url) else { return }
+    func setLogoImage(for companyName: String) {
+        let urlString = "https://logo.clearbit.com/\(companyName.replacingOccurrences(of: " ", with: ""))"
+        var domains = [".com", ".org", ".ca", ".net", ".io", ".co", ".uk", ".tech"]
 
-        DispatchQueue.global().async {
-            guard let imageData = try? Data(contentsOf: imageURL) else {
+        // If user enters a website instead of a company name
+        if companyName.contains(".") { domains = [""] }
+
+        for domain in domains {
+            if let imageUrl = URL(string: urlString.appending(domain)),
+               let imageData = try? Data(contentsOf: imageUrl) {
+                let image = UIImage(data: imageData)
                 DispatchQueue.main.async {
-                    // Try four domains - .com, .ca, .org, .co
-                    let url = "https://logo.clearbit.com/\(companyName.replacingOccurrences(of: " ", with: ""))"
-                    if self.tag == 0 {
-                        self.setLogoImage(
-                            from: "\(url).org",
-                            for: companyName
-                        )
-
-                        self.tag = 1
-                    } else if self.tag == 1 {
-                        self.setLogoImage(
-                            from: "\(url).ca",
-                            for: companyName
-                        )
-
-                        self.tag = 2
-                    } else if self.tag == 2 {
-                        self.setLogoImage(
-                            from: "\(url).co",
-                            for: companyName
-                        )
-
-                        self.tag = 3
-                    } else if self.tag == 3 {
-                        UIView.transition(with: self,
-                        duration: 0.5,
-                        options: .transitionCrossDissolve,
-                        animations: {
-                            self.image = UIImage(
-                                systemName: "questionmark.circle.fill",
-                                withConfiguration: UIImage.SymbolConfiguration(pointSize: 1)
-                            )
-                        },
-                        completion: nil)
-                        self.tintColor = .black
-                        self.tag = 0
-                    }
+                    UIView.transition(with: self,
+                    duration: 0.15,
+                    options: .transitionCrossDissolve,
+                    animations: { self.image = image },
+                    completion: nil)
                 }
                 return
             }
-            let image = UIImage(data: imageData)
-            DispatchQueue.main.async {
-                self.tag = 0
-                UIView.transition(with: self,
-                duration: 0.15,
-                options: .transitionCrossDissolve,
-                animations: { self.image = image },
-                completion: nil)
-            }
+        }
+
+        DispatchQueue.main.async {
+            UIView.transition(with: self,
+            duration: 0.5,
+            options: .transitionCrossDissolve,
+            animations: {
+                self.image = UIImage(
+                    systemName: "questionmark.circle.fill",
+                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 1)
+                )
+            },
+            completion: nil)
+            self.tintColor = .black
         }
     }
 }

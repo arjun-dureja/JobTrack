@@ -81,11 +81,7 @@ class JobCollectionViewCell: UICollectionViewCell {
     func setCompany(_ company: Company) {
         self.company = company
 
-        logoImageView.setLogoImage(
-            from: "https://logo.clearbit.com/\(company.companyName!.replacingOccurrences(of: " ", with: "")).com",
-            for: self.company!.companyName!
-        )
-
+        logoImageView.setLogoImage(for: self.company!.companyName!)
         companyNameLabel.text = company.companyName
         jobPositionLabel.text = company.jobPosition
         applicationStatusLabel.text = company.applicationStatus.rawValue
