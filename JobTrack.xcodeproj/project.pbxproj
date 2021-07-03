@@ -21,6 +21,8 @@
 		726B26AD24DE64C7002CFAB0 /* IAP_ProductIDs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 726B26AC24DE64C7002CFAB0 /* IAP_ProductIDs.plist */; };
 		726B26AF24DE6516002CFAB0 /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726B26AE24DE6516002CFAB0 /* IAPManager.swift */; };
 		726B26B324DF3E75002CFAB0 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726B26B224DF3E75002CFAB0 /* LaunchViewController.swift */; };
+		72B9B08726910E5A0064656F /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B9B08626910E5A0064656F /* ImageCache.swift */; };
+		72B9B08926910EFC0064656F /* ImageURLProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B9B08826910EFC0064656F /* ImageURLProtocol.swift */; };
 		72BC733A24D6176700FF2B22 /* JobTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733824D6176700FF2B22 /* JobTracker.xcdatamodeld */; };
 		72BC733D24D618AA00FF2B22 /* Company+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733B24D618AA00FF2B22 /* Company+CoreDataClass.swift */; };
 		72BC733E24D618AA00FF2B22 /* Company+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733C24D618AA00FF2B22 /* Company+CoreDataProperties.swift */; };
@@ -57,6 +59,8 @@
 		726B26AC24DE64C7002CFAB0 /* IAP_ProductIDs.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = IAP_ProductIDs.plist; sourceTree = "<group>"; };
 		726B26AE24DE6516002CFAB0 /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		726B26B224DF3E75002CFAB0 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
+		72B9B08626910E5A0064656F /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		72B9B08826910EFC0064656F /* ImageURLProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageURLProtocol.swift; sourceTree = "<group>"; };
 		72BC733924D6176700FF2B22 /* JobTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JobTracker.xcdatamodel; sourceTree = "<group>"; };
 		72BC733B24D618AA00FF2B22 /* Company+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company+CoreDataClass.swift"; sourceTree = "<group>"; };
 		72BC733C24D618AA00FF2B22 /* Company+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -115,6 +119,8 @@
 				72BC733524D6170400FF2B22 /* View */,
 				72BC733624D6170700FF2B22 /* View Controller */,
 				72D8C51F24CE53520016E94B /* Factories.swift */,
+				72B9B08826910EFC0064656F /* ImageURLProtocol.swift */,
+				72B9B08626910E5A0064656F /* ImageCache.swift */,
 				726B26AE24DE6516002CFAB0 /* IAPManager.swift */,
 				723A9EEE24CDFA7000072D53 /* AppDelegate.swift */,
 				723A9EF024CDFA7000072D53 /* SceneDelegate.swift */,
@@ -346,11 +352,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				72B9B08726910E5A0064656F /* ImageCache.swift in Sources */,
 				723A9EF324CDFA7000072D53 /* HomeViewController.swift in Sources */,
 				72BC734724D8C67300FF2B22 /* TabBarController.swift in Sources */,
 				723A9EEF24CDFA7000072D53 /* AppDelegate.swift in Sources */,
 				72CE55D224D8CAFD004F5520 /* JobStatsViewController.swift in Sources */,
 				72D8C52624CE82670016E94B /* SettingsViewController.swift in Sources */,
+				72B9B08926910EFC0064656F /* ImageURLProtocol.swift in Sources */,
 				72D8C52924CF83290016E94B /* AddJobViewController.swift in Sources */,
 				72297F7224DD01A600262784 /* ReportProblemViewController.swift in Sources */,
 				72BC734324D7B0E100FF2B22 /* CSVExportViewController.swift in Sources */,

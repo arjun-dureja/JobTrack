@@ -348,7 +348,17 @@ extension AddJobViewController {
 
     // Set logo once user finishes adding company
     @objc func companyEditingFinished(_ sender: UITextField) {
-        self.logoImageView.setLogoImage(for: self.companyNameField.text!)
+        ImageCache.shared.loadImage(companyName: self.companyNameField.text!, addToCache: false) { image in
+            guard let image = image else { return }
+            UIView.transition(
+                with: self.view,
+                duration: 0.15,
+                options: .transitionCrossDissolve,
+                animations: { self.logoImageView.image = image }
+            )
+
+            self.logoImageView.tintColor = .black
+        }
     }
 
     // User taps add job button

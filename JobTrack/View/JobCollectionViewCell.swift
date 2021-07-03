@@ -77,11 +77,34 @@ class JobCollectionViewCell: UICollectionViewCell {
         updateColors(for: company!)
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.logoImageView.image = nil
+    }
+
     // Function called from parent VC
     func setCompany(_ company: Company) {
         self.company = company
 
-        logoImageView.setLogoImage(for: self.company!.companyName!)
+        if let cachedImage = ImageCache.shared.cache.object(
+            forKey: company.companyName! as NSString
+        ) {
+            print("Using a cached image for item: \(company.companyName!)")
+            self.logoImageView.image = cachedImage
+        } else {
+            ImageCache.shared.loadImage(companyName: company.companyName!, addToCache: true) { (image) in
+                guard let image = image else { return }
+                UIView.transition(
+                    with: self,
+                    duration: 0.15,
+                    options: .transitionCrossDissolve,
+                    animations: { self.logoImageView.image = image }
+                )
+
+                self.logoImageView.tintColor = .black
+            }
+        }
+
         companyNameLabel.text = company.companyName
         jobPositionLabel.text = company.jobPosition
         applicationStatusLabel.text = company.applicationStatus.rawValue

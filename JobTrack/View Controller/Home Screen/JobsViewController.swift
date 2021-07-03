@@ -88,7 +88,6 @@ extension JobsViewController: UICollectionViewDelegate,
         cell.setCompany(companies[indexPath.item])
         cell.indexPath = indexPath
         cell.favoriteDelegate = self
-
         return cell
     }
 
