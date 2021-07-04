@@ -80,10 +80,10 @@ extension JobsViewController: UICollectionViewDelegate,
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(
+        guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: reuseIdentifier,
             for: indexPath
-        ) as! JobCollectionViewCell
+        ) as? JobCollectionViewCell else { fatalError("Unable to dequeue cells") }
 
         cell.setCompany(companies[indexPath.item])
         cell.indexPath = indexPath
@@ -106,9 +106,9 @@ extension JobsViewController: UICollectionViewDelegate,
         point: CGPoint
     ) -> UIContextMenuConfiguration? {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
-
             // Edit button
-            let edit = UIAction(title: "Edit", image: UIImage(systemName: "square.and.pencil")) { _ in
+            let edit = UIAction(title: "Edit", image: UIImage(systemName: "square.and.pencil")) { [weak self] _ in
+                guard let self = self else { return }
                 let vc = AddJobViewController()
                 vc.enableEditing(for: self.companies[indexPath.item])
                 vc.isEditingEnabled = true
@@ -131,9 +131,11 @@ extension JobsViewController: UICollectionViewDelegate,
                 ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
                     return
                 }))
+
                 ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-                    self?.deleteDelegate.deleteTapped(at: (self?.companies[indexPath.item])!)
-                    self?.companies.remove(at: indexPath.item)
+                    guard let self = self else { return }
+                    self.deleteDelegate.deleteTapped(at: self.companies[indexPath.item])
+                    self.companies.remove(at: indexPath.item)
                     collectionView.reloadData()
                 }))
 

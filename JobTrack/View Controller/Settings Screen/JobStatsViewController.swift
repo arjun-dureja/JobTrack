@@ -218,7 +218,8 @@ class JobStatsViewController: UIViewController {
     @objc func pieChartDownloadTapped() {
         chartToShare = 0
         let renderer = UIGraphicsImageRenderer(size: self.pieChart.bounds.size)
-        let image = renderer.image { _ in
+        let image = renderer.image { [weak self] _ in
+            guard let self = self else { return }
             self.pieChart.drawHierarchy(in: self.pieChart.bounds, afterScreenUpdates: true)
         }
 
@@ -233,7 +234,8 @@ class JobStatsViewController: UIViewController {
     @objc func barChartDownloadTapped() {
         chartToShare = 1
         let renderer = UIGraphicsImageRenderer(size: self.barChart.bounds.size)
-        let image = renderer.image { _ in
+        let image = renderer.image { [weak self] _ in
+            guard let self = self else { return }
             self.barChart.drawHierarchy(in: self.barChart.bounds, afterScreenUpdates: true)
         }
 
@@ -266,17 +268,22 @@ extension JobStatsViewController: UIActivityItemSource {
         var chartImage = UIImage()
         if chartToShare == 0 {
             let renderer = UIGraphicsImageRenderer(size: self.pieChart.bounds.size)
-            chartImage = renderer.image { _ in
+            chartImage = renderer.image { [weak self] _ in
+                guard let self = self else { return }
                 self.pieChart.drawHierarchy(in: self.pieChart.bounds, afterScreenUpdates: true)
             }
+
             metadata.title = "Pie Chart"
         } else {
             let renderer = UIGraphicsImageRenderer(size: self.barChart.bounds.size)
-            chartImage = renderer.image { _ in
+            chartImage = renderer.image { [weak self] _ in
+                guard let self = self else { return }
                 self.barChart.drawHierarchy(in: self.barChart.bounds, afterScreenUpdates: true)
             }
+
             metadata.title = "Bar Chart"
         }
+
         let image = chartImage
         let imageProvider = NSItemProvider(object: image)
         metadata.imageProvider = imageProvider

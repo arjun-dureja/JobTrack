@@ -16,18 +16,18 @@ extension Company {
         return NSFetchRequest<Company>(entityName: "Company")
     }
 
-    @NSManaged public var companyName: String?
-    @NSManaged public var jobPosition: String?
-    @NSManaged private var status: String?
+    @NSManaged public var companyName: String
+    @NSManaged public var jobPosition: String
+    @NSManaged private var status: String
     var applicationStatus: ApplicationStatus {
         get {
-            return ApplicationStatus(rawValue: self.status!)!
+            return ApplicationStatus(rawValue: self.status) ?? ApplicationStatus.applied
         }
         set {
             self.status = newValue.rawValue
         }
     }
-    @NSManaged public var isFavorite: Bool
-    @NSManaged public var dateAdded: Date?
 
+    @NSManaged public var isFavorite: Bool
+    @NSManaged public var dateAdded: Date
 }

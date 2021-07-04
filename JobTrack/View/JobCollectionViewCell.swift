@@ -22,7 +22,7 @@ class JobCollectionViewCell: UICollectionViewCell {
     let favoriteButton = UIButton()
     let dateAdded = UILabel()
 
-    var company: Company?
+    var company: Company!
     var indexPath: IndexPath!
     weak var favoriteDelegate: FavoriteButtonDelegate!
 
@@ -39,7 +39,6 @@ class JobCollectionViewCell: UICollectionViewCell {
     // Set colors for all UI
     func updateColors(for company: Company) {
         switch company.applicationStatus {
-
         case .applied:
             backgroundColor = .semanticApplied
             applicationStatusLabel.textColor = .semanticAppliedText
@@ -75,13 +74,13 @@ class JobCollectionViewCell: UICollectionViewCell {
     // If user changed to dark mode
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateColors(for: company!)
+        updateColors(for: company)
     }
 
     // Function called from parent VC
     func setCompany(_ company: Company) {
         self.company = company
-        ImageCache.shared.loadImage(companyName: company.companyName!) { (image, fromCache) in
+        ImageCache.shared.loadImage(companyName: company.companyName) { (image, fromCache) in
             guard let image = image else { return }
             if fromCache {
                 self.logoImageView.image = image
@@ -110,7 +109,7 @@ class JobCollectionViewCell: UICollectionViewCell {
 
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
-        dateAdded.text = "added on \(dateFormatter.string(from: company.dateAdded!))"
+        dateAdded.text = "added on \(dateFormatter.string(from: company.dateAdded))"
     }
 
     required init?(coder aDecoder: NSCoder) {

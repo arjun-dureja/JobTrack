@@ -355,9 +355,10 @@ extension AddJobViewController {
 
     // Set logo once user finishes adding company
     @objc func companyEditingFinished(_ sender: UITextField) {
+        guard let companyName = companyNameField.text else { return }
         logoActivityIndicator.startAnimating()
-        ImageCache.shared.loadImage(companyName: self.companyNameField.text!) { image, _ in
-            guard let image = image else { return }
+        ImageCache.shared.loadImage(companyName: companyName) { [weak self] image, _ in
+            guard let image = image, let self = self else { return }
             UIView.transition(
                 with: self.view,
                 duration: 0.15,
@@ -372,16 +373,21 @@ extension AddJobViewController {
 
     // User taps add job button
     @objc func addTapped() {
-        if !isEditingEnabled {
-            jobDelegate.addButtonTapped(
-                companyName: companyNameField.text!,
-                jobPosition: positionField.text!,
-                applicationStatus: ApplicationStatus(rawValue: applicationStatusField.text!.uppercased())!
-            )
-        } else {
-            companyToEdit.jobPosition = positionField.text!
-            companyToEdit.applicationStatus = ApplicationStatus(rawValue: applicationStatusField.text!.uppercased())!
-            jobDelegate.saveButtonTapped(company: companyToEdit)
+        if let companyName = companyNameField.text,
+           let jobPosition = positionField.text,
+           let applicationStatusText = applicationStatusField.text,
+           let applicationStatus = ApplicationStatus(rawValue: applicationStatusText.uppercased()) {
+            if !isEditingEnabled {
+                jobDelegate.addButtonTapped(
+                    companyName: companyName,
+                    jobPosition: jobPosition,
+                    applicationStatus: applicationStatus
+                )
+            } else {
+                companyToEdit.jobPosition = jobPosition
+                companyToEdit.applicationStatus = applicationStatus
+                jobDelegate.saveButtonTapped(company: companyToEdit)
+            }
         }
         dismiss(animated: true)
     }

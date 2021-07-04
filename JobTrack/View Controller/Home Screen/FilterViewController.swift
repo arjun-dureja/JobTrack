@@ -78,7 +78,7 @@ extension FilterViewController {
         searchBar.autocorrectionType = .no
         searchBar.autocapitalizationType = .none
 
-        let searchBarTextField = searchBar.value(forKey: "searchField") as! UITextField
+        guard let searchBarTextField = searchBar.value(forKey: "searchField") as? UITextField else { return }
         searchBarTextField.layer.borderWidth = 1.5
         searchBarTextField.layer.cornerRadius = 8
         searchBarTextField.layer.borderColor = UIColor.semanticFilterBorder.cgColor

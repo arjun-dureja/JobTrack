@@ -146,14 +146,15 @@ class SettingsViewController: UIViewController {
         }))
 
         ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-            for i in 0..<(self?.companies.count)! {
-                self?.context.delete((self?.companies[i])!)
+            guard let self = self else { return }
+            for i in 0..<self.companies.count {
+                self.context.delete(self.companies[i])
             }
 
-            self?.companies.removeAll()
+            self.companies.removeAll()
 
             do {
-                try self?.context.save()
+                try self.context.save()
             } catch let error as NSError {
                 print(error)
             }

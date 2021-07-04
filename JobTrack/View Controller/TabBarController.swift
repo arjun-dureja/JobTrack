@@ -61,11 +61,11 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
                         fromView.center = CGPoint(x: fromView.center.x - offset, y: fromView.center.y)
                         toView.center = CGPoint(x: toView.center.x - offset, y: toView.center.y)
 
-        }, completion: { _ in
+        }, completion: { [weak self] _ in
             // Remove the old view from the tabbar view.
             fromView.removeFromSuperview()
-            self.selectedIndex = toIndex
-            self.view.isUserInteractionEnabled = true
+            self?.selectedIndex = toIndex
+            self?.view.isUserInteractionEnabled = true
         })
     }
 

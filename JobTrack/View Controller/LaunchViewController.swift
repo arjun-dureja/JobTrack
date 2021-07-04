@@ -42,14 +42,14 @@ class LaunchViewController: UIViewController {
         // Fading and presenting home VC
         UIView.animate(withDuration: 1.5, animations: {
             self.imageView.alpha = 0
-        }, completion: { done in
+        }, completion: { [weak self] done in
             if done {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
                     let mainST = UIStoryboard(name: "Main", bundle: Bundle.main)
                     let vc = mainST.instantiateViewController(withIdentifier: "TabBar")
                     vc.modalTransitionStyle = .crossDissolve
                     vc.modalPresentationStyle = .fullScreen
-                    self.present(vc, animated: true)
+                    self?.present(vc, animated: true)
                 }
             }
         })

@@ -21,7 +21,6 @@ public class ImageCache {
             // Check if image exists in cache first
             if let cachedImage = ImageCache.shared.cache.object(forKey: key) {
                 DispatchQueue.main.async {
-                    print("Using a cached image for item: \(key)")
                     completion(cachedImage, true)
                 }
 

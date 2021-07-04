@@ -51,7 +51,7 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
         do {
             jobsVC.companies = try context.fetch(Company.fetchRequest())
             jobsVC.companies = jobsVC.companies.sorted {
-                $0.dateAdded! > $1.dateAdded!
+                $0.dateAdded > $1.dateAdded
             }
 
             jobsVC.jobsCollectionView.reloadData()
@@ -238,7 +238,7 @@ extension HomeViewController: UISearchBarDelegate {
     // Search for results as user types
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         jobsVC.companies = jobsSortedByDate.filter {
-            $0.companyName!.lowercased().hasPrefix(searchText.lowercased())
+            $0.companyName.lowercased().hasPrefix(searchText.lowercased())
         }
 
         jobsVC.jobsCollectionView.reloadData()
@@ -278,7 +278,7 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         if !sender.isSelected {
             if sender.titleLabel?.text == "BY DATE" {
                 jobsVC.companies = jobsSortedByDate.sorted {
-                    $0.dateAdded! > $1.dateAdded!
+                    $0.dateAdded > $1.dateAdded
                 }
             } else if sender.titleLabel?.text == "BY STATUS" {
                 jobsVC.companies = jobsSortedByDate.sorted {
@@ -286,7 +286,7 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                 }
             } else if sender.titleLabel?.text == "A - Z" {
                 jobsVC.companies = jobsSortedByDate.sorted {
-                    $0.companyName!.lowercased() < $1.companyName!.lowercased()
+                    $0.companyName.lowercased() < $1.companyName.lowercased()
                 }
             } else if sender.titleLabel?.text == "FAVORITES" {
                 jobsVC.companies = jobsSortedByDate.filter {

@@ -39,14 +39,14 @@ class TipViewController: UIViewController {
 
     // Get products from IAPManager
     func viewDidSetup() {
-        IAPManager.shared.getProducts { (result) in
+        IAPManager.shared.getProducts { [weak self] (result) in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let products): self.products = products
+                case .success(let products): self?.products = products
                 case .failure(let error): print(error)
                 }
-                self.products.reverse()
-                self.tipTableView.reloadData()
+                self?.products.reverse()
+                self?.tipTableView.reloadData()
             }
         }
     }
@@ -80,12 +80,12 @@ class TipViewController: UIViewController {
         if !IAPManager.shared.canMakePayments() {
             return false
         } else {
-            IAPManager.shared.buy(product: product) { (result) in
+            IAPManager.shared.buy(product: product) { [weak self] (result) in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(_):
-                        self.showAlert("Thank you!")
-                    case .failure(let error): self.showAlert(error.localizedDescription)
+                        self?.showAlert("Thank you!")
+                    case .failure(let error): self?.showAlert(error.localizedDescription)
                     }
                 }
             }
