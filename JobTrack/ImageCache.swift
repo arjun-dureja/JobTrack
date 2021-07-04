@@ -16,20 +16,19 @@ public class ImageCache {
 
     final func loadImage(companyName: String, completion: @escaping (UIImage?, Bool) -> Swift.Void) {
         utilityQueue.async {
-            let key = companyName.lowercased() as NSString
+            let key = companyName.replacingOccurrences(of: " ", with: "").lowercased() as NSString
 
             // Check if image exists in cache first
             if let cachedImage = ImageCache.shared.cache.object(forKey: key) {
                 DispatchQueue.main.async {
-                    print("Using a cached image for item: \(companyName)")
+                    print("Using a cached image for item: \(key)")
                     completion(cachedImage, true)
                 }
 
                 return
             }
 
-            let companyNameWithoutFormatting = companyName.replacingOccurrences(of: " ", with: "").lowercased()
-            let urlString = "https://logo.clearbit.com/\(companyNameWithoutFormatting)"
+            let urlString = "https://logo.clearbit.com/\(key as String)"
             var domains = [".com", ".org", ".ca", ".net", ".io", ".co", ".uk", ".tech", ".network"]
 
             // If user enters a website instead of a company name
