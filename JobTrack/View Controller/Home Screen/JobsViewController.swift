@@ -181,7 +181,12 @@ extension JobsViewController: UICollectionViewDelegate,
 
 // MARK: - AddJobDelegate
 extension JobsViewController: AddJobDelegate {
-    func addButtonTapped(companyName: String, jobPosition: String, applicationStatus: ApplicationStatus) {
+    func addButtonTapped(
+        companyName: String,
+        jobPosition: String,
+        dateAdded: Date,
+        applicationStatus: ApplicationStatus
+    ) {
         return
     }
 

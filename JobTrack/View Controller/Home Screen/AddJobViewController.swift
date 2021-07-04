@@ -17,6 +17,8 @@ class AddJobViewController: UIViewController {
     let cancelButton = UIButton(type: .system)
     let companyNameField = UITextField()
     let positionField = UITextField()
+    let dateField = UITextField()
+    let datePicker = UIDatePicker()
 
     let applicationStatusField = UITextField()
     let applicationStatusFieldDownArrow = UILabel()
@@ -90,6 +92,7 @@ class AddJobViewController: UIViewController {
         companyNameField.text = company.companyName
         positionField.text = company.jobPosition
         applicationStatusField.text = company.applicationStatus.rawValue.capitalized
+        datePicker.date = company.dateAdded
 
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
             self.companyNameField.resignFirstResponder()
@@ -146,8 +149,18 @@ class AddJobViewController: UIViewController {
         setupTextField(for: companyNameField, placeHolder: "Company")
         setupTextField(for: positionField, placeHolder: "Position")
         setupTextField(for: applicationStatusField, placeHolder: "")
+        setupTextField(for: dateField, placeHolder: "")
 
         companyNameField.returnKeyType = .next
+
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.datePickerMode = .date
+        datePicker.maximumDate = Date()
+        datePicker.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
+
+        dateField.inputView = datePicker
+        dateField.tintColor = .clear
+        updateDateField(date: Date())
 
         applicationStatusPicker.delegate = self
         applicationStatusPicker.dataSource = self
@@ -171,6 +184,7 @@ class AddJobViewController: UIViewController {
 
         applicationStatusField.inputView = applicationStatusPicker
         applicationStatusField.inputAccessoryView = toolBar
+        dateField.inputAccessoryView = toolBar
         if !isEditingEnabled {
             headerView.backgroundColor = .appliedBackground
             applicationStatusField.text = ApplicationStatus.applied.rawValue.capitalized
@@ -180,18 +194,22 @@ class AddJobViewController: UIViewController {
             case .applied:
                 applicationStatusField.textColor = .appliedBackground
                 headerView.backgroundColor = .appliedBackground
+
             case .offer:
                 applicationStatusField.textColor = .offerBackground
                 headerView.backgroundColor = .offerBackground
                 applicationStatusPicker.selectRow(3, inComponent: 0, animated: false)
+
             case.onSite:
                 applicationStatusField.textColor = .onSiteBackground
                 headerView.backgroundColor = .onSiteBackground
                 applicationStatusPicker.selectRow(2, inComponent: 0, animated: false)
+
             case .phoneScreen:
                 applicationStatusField.textColor = .phoneScreenBackground
                 headerView.backgroundColor = .phoneScreenBackground
                 applicationStatusPicker.selectRow(1, inComponent: 0, animated: false)
+
             case .rejected:
                 applicationStatusField.textColor = .rejectedBackground
                 headerView.backgroundColor = .rejectedBackground
@@ -232,6 +250,7 @@ class AddJobViewController: UIViewController {
         scrollView.addSubview((companyNameField))
         scrollView.addSubview(positionField)
         scrollView.addSubview(applicationStatusField)
+        scrollView.addSubview(dateField)
         scrollView.addSubview(addJobButton)
         scrollView.addSubview(cancelButton)
         scrollView.addSubview(clearbitLink)
@@ -303,7 +322,16 @@ class AddJobViewController: UIViewController {
                 constant: -15
             ),
 
-            addJobButton.topAnchor.constraint(equalTo: applicationStatusField.bottomAnchor, constant: 25),
+            dateField.topAnchor.constraint(equalTo: applicationStatusField.bottomAnchor, constant: 10),
+            dateField.leadingAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.leadingAnchor, constant: 10),
+            dateField.trailingAnchor.constraint(
+                equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor,
+                constant: -10
+            ),
+
+            dateField.heightAnchor.constraint(equalToConstant: 40),
+
+            addJobButton.topAnchor.constraint(equalTo: dateField.bottomAnchor, constant: 25),
             addJobButton.leadingAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.leadingAnchor, constant: 10),
             addJobButton.trailingAnchor.constraint(
                 equalTo: scrollView.safeAreaLayoutGuide.trailingAnchor,
@@ -326,11 +354,27 @@ class AddJobViewController: UIViewController {
 
         ])
     }
+
+    @objc func handleDatePicker(_ datePicker: UIDatePicker) {
+        updateDateField(date: datePicker.date)
+    }
+
+    func updateDateField(date: Date) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        dateField.text = "Date: \(dateFormatter.string(from: date))"
+    }
 }
 
 // MARK: - AddJobDelegate
 protocol AddJobDelegate: AnyObject {
-    func addButtonTapped(companyName: String, jobPosition: String, applicationStatus: ApplicationStatus)
+    func addButtonTapped(
+        companyName: String,
+        jobPosition: String,
+        dateAdded: Date,
+        applicationStatus: ApplicationStatus
+    )
+
     func saveButtonTapped(company: Company)
 }
 
@@ -339,7 +383,6 @@ extension AddJobViewController {
 
     // Only enable add job button if fields are filled
     @objc func editingChanged(_ textField: UITextField) {
-
         guard
             let company = companyNameField.text, !company.isEmpty,
             let position = positionField.text, !position.isEmpty
@@ -382,11 +425,13 @@ extension AddJobViewController {
                 jobDelegate.addButtonTapped(
                     companyName: companyName,
                     jobPosition: jobPosition,
+                    dateAdded: datePicker.date,
                     applicationStatus: applicationStatus
                 )
             } else {
                 companyToEdit.jobPosition = jobPosition
                 companyToEdit.applicationStatus = applicationStatus
+                companyToEdit.dateAdded = datePicker.date
                 jobDelegate.saveButtonTapped(company: companyToEdit)
             }
         }
@@ -405,6 +450,7 @@ extension AddJobViewController {
 
     @objc func doneTapped() {
         self.applicationStatusField.resignFirstResponder()
+        self.dateField.resignFirstResponder()
     }
 }
 

@@ -175,13 +175,18 @@ extension HomeViewController: AddJobDelegate {
     }
 
     // Function called when the Add Job button is tapped
-    func addButtonTapped(companyName: String, jobPosition: String, applicationStatus: ApplicationStatus) {
+    func addButtonTapped(
+        companyName: String,
+        jobPosition: String,
+        dateAdded: Date,
+        applicationStatus: ApplicationStatus
+    ) {
         let company = Company(context: self.context)
         company.companyName = companyName
         company.jobPosition = jobPosition
         company.applicationStatus = applicationStatus
         company.isFavorite = false
-        company.dateAdded = Date()
+        company.dateAdded = dateAdded
 
         do {
             try self.context.save()
