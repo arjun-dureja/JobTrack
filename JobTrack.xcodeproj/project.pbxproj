@@ -22,6 +22,7 @@
 		726B26AF24DE6516002CFAB0 /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726B26AE24DE6516002CFAB0 /* IAPManager.swift */; };
 		726B26B324DF3E75002CFAB0 /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 726B26B224DF3E75002CFAB0 /* LaunchViewController.swift */; };
 		72B9B08726910E5A0064656F /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B9B08626910E5A0064656F /* ImageCache.swift */; };
+		72B9B08B26916B970064656F /* FilterStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B9B08A26916B970064656F /* FilterStatus.swift */; };
 		72BC733A24D6176700FF2B22 /* JobTracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733824D6176700FF2B22 /* JobTracker.xcdatamodeld */; };
 		72BC733D24D618AA00FF2B22 /* Company+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733B24D618AA00FF2B22 /* Company+CoreDataClass.swift */; };
 		72BC733E24D618AA00FF2B22 /* Company+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72BC733C24D618AA00FF2B22 /* Company+CoreDataProperties.swift */; };
@@ -59,6 +60,7 @@
 		726B26AE24DE6516002CFAB0 /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		726B26B224DF3E75002CFAB0 /* LaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		72B9B08626910E5A0064656F /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		72B9B08A26916B970064656F /* FilterStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterStatus.swift; sourceTree = "<group>"; };
 		72BC733924D6176700FF2B22 /* JobTracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JobTracker.xcdatamodel; sourceTree = "<group>"; };
 		72BC733B24D618AA00FF2B22 /* Company+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company+CoreDataClass.swift"; sourceTree = "<group>"; };
 		72BC733C24D618AA00FF2B22 /* Company+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Company+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				72BC733B24D618AA00FF2B22 /* Company+CoreDataClass.swift */,
 				72BC733C24D618AA00FF2B22 /* Company+CoreDataProperties.swift */,
 				72D8C52324CE6DD00016E94B /* ApplicationStatus.swift */,
+				72B9B08A26916B970064656F /* FilterStatus.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 				723A9EF324CDFA7000072D53 /* HomeViewController.swift in Sources */,
 				72BC734724D8C67300FF2B22 /* TabBarController.swift in Sources */,
 				723A9EEF24CDFA7000072D53 /* AppDelegate.swift in Sources */,
+				72B9B08B26916B970064656F /* FilterStatus.swift in Sources */,
 				72CE55D224D8CAFD004F5520 /* JobStatsViewController.swift in Sources */,
 				72D8C52624CE82670016E94B /* SettingsViewController.swift in Sources */,
 				72D8C52924CF83290016E94B /* AddJobViewController.swift in Sources */,

@@ -288,19 +288,19 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             sender.isSelected = true
 
             // Sort based on which button user tapped
-            if sender.titleLabel?.text == "BY DATE" {
+            if sender.titleLabel?.text == FilterStatus.byDate() {
                 jobsVC.companies = jobsSortedByDate.sorted {
                     $0.dateAdded > $1.dateAdded
                 }
-            } else if sender.titleLabel?.text == "BY STATUS" {
+            } else if sender.titleLabel?.text == FilterStatus.byStatus() {
                 jobsVC.companies = jobsSortedByDate.sorted {
                     $0.applicationStatus < $1.applicationStatus
                 }
-            } else if sender.titleLabel?.text == "A - Z" {
+            } else if sender.titleLabel?.text == FilterStatus.aToZ() {
                 jobsVC.companies = jobsSortedByDate.sorted {
                     $0.companyName.lowercased() < $1.companyName.lowercased()
                 }
-            } else if sender.titleLabel?.text == "FAVORITES" {
+            } else if sender.titleLabel?.text == FilterStatus.favorites() {
                 jobsVC.companies = jobsSortedByDate.filter {
                     $0.isFavorite
                 }
@@ -320,20 +320,17 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         filterVC.statusField.layer.borderColor = statusFieldColors[row].cgColor
         if row == 0 {
             filterVC.statusFieldLabel.textColor = .semanticFilterText
+            filterVC.dateButton.sendActions(for: .touchUpInside)
         } else {
             filterVC.statusFieldLabel.textColor = statusFieldColors[row]
-        }
-        filterVC.statusFieldDownArrow.textColor = filterVC.statusFieldLabel.textColor
-
-        if row != 0 {
             for button in filterVC.filterButtons {
                 button.setTitleColor(.semanticFilterText, for: .normal)
                 button.backgroundColor = .systemBackground
                 button.isSelected = false
             }
-        } else {
-            filterVC.dateButton.sendActions(for: .touchUpInside)
         }
+
+        filterVC.statusFieldDownArrow.textColor = filterVC.statusFieldLabel.textColor
 
         // Sort based on which status user selected
         switch row {
@@ -362,6 +359,7 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         default:
             break
         }
+
         jobsVC.jobsCollectionView.reloadData()
     }
 
