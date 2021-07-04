@@ -14,6 +14,7 @@ class JobCollectionViewCell: UICollectionViewCell {
 
     let logoView = UIView()
     let logoImageView = UIImageView()
+    let logoActivityIndicator = UIActivityIndicatorView()
     let companyNameLabel = UILabel()
     let jobPositionLabel = UILabel()
     let applicationStatusLabel = UILabel()
@@ -77,11 +78,6 @@ class JobCollectionViewCell: UICollectionViewCell {
         updateColors(for: company!)
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.logoImageView.image = nil
-    }
-
     // Function called from parent VC
     func setCompany(_ company: Company) {
         self.company = company
@@ -97,6 +93,7 @@ class JobCollectionViewCell: UICollectionViewCell {
                     animations: { self.logoImageView.image = image }
                 )
             }
+            self.logoActivityIndicator.stopAnimating()
         }
 
         companyNameLabel.text = company.companyName
@@ -134,7 +131,11 @@ extension JobCollectionViewCell {
         logoImageView.layer.borderWidth = 2.5
         logoImageView.tintColor = .black
 
+        logoActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        logoActivityIndicator.startAnimating()
+
         logoView.addSubview(logoImageView)
+        logoView.addSubview(logoActivityIndicator)
 
         companyNameLabel.translatesAutoresizingMaskIntoConstraints = false
         companyNameLabel.font = UIFont.boldSystemFont(ofSize: 18)
@@ -177,6 +178,9 @@ extension JobCollectionViewCell {
             logoImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             logoImageView.heightAnchor.constraint(equalToConstant: 65),
             logoImageView.widthAnchor.constraint(equalToConstant: 65),
+
+            logoActivityIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
+            logoActivityIndicator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 38.5),
 
             jobDetailsStackView.centerYAnchor.constraint(equalTo: centerYAnchor),
             jobDetailsStackView.leadingAnchor.constraint(equalTo: logoImageView.trailingAnchor, constant: 16),

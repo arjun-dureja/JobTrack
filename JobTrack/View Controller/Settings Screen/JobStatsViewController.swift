@@ -140,7 +140,7 @@ class JobStatsViewController: UIViewController {
                               .rejectedBackground]
 
         var entries = [PieChartDataEntry]()
-        let pieChartLabels = ["Offer", "On Site", "Phone Screen", "Applied", "Rejected"]
+        let pieChartLabels = ["Offer", "On Site", "Phone\nScreen", "Applied", "Rejected"]
         var dataSetColors: [UIColor] = []
 
         for i in 0..<values.count where values[i] != 0 {

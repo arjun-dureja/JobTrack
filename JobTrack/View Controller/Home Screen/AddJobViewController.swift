@@ -40,6 +40,7 @@ class AddJobViewController: UIViewController {
 
     let headerView = UIView()
     let logoImageView = UIImageView()
+    let logoActivityIndicator = UIActivityIndicatorView()
 
     let clearbitLink = UIButton(type: .system)
 
@@ -139,6 +140,8 @@ class AddJobViewController: UIViewController {
         logoImageView.layer.borderWidth = 2
         logoImageView.layer.borderColor = UIColor.systemGray.cgColor
 
+        logoActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
+
         setupTextField(for: companyNameField, placeHolder: "Company")
         setupTextField(for: positionField, placeHolder: "Position")
         setupTextField(for: applicationStatusField, placeHolder: "")
@@ -233,6 +236,7 @@ class AddJobViewController: UIViewController {
         scrollView.addSubview(clearbitLink)
 
         headerView.addSubview(logoImageView)
+        headerView.addSubview(logoActivityIndicator)
         applicationStatusField.addSubview(applicationStatusFieldDownArrow)
 
         NSLayoutConstraint.activate([
@@ -249,6 +253,9 @@ class AddJobViewController: UIViewController {
             logoImageView.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
             logoImageView.heightAnchor.constraint(equalToConstant: 100),
             logoImageView.widthAnchor.constraint(equalToConstant: 100),
+
+            logoActivityIndicator.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            logoActivityIndicator.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
 
             companyNameField.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 20),
             companyNameField.leadingAnchor.constraint(
@@ -348,13 +355,17 @@ extension AddJobViewController {
 
     // Set logo once user finishes adding company
     @objc func companyEditingFinished(_ sender: UITextField) {
+        logoActivityIndicator.startAnimating()
         ImageCache.shared.loadImage(companyName: self.companyNameField.text!) { image, _ in
             guard let image = image else { return }
             UIView.transition(
                 with: self.view,
                 duration: 0.15,
                 options: .transitionCrossDissolve,
-                animations: { self.logoImageView.image = image }
+                animations: { self.logoImageView.image = image },
+                completion: { _ in
+                    self.logoActivityIndicator.stopAnimating()
+                }
             )
         }
     }
