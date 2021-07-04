@@ -69,4 +69,14 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         })
     }
 
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        // Pop to root unless user is on report problem view controller - delay for slide animation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if let navigationController = tabBarController.viewControllers?[1] as? UINavigationController {
+                if navigationController.topViewController as? ReportProblemViewController == nil {
+                    navigationController.popToRootViewController(animated: false)
+                }
+            }
+        }
+    }
 }
