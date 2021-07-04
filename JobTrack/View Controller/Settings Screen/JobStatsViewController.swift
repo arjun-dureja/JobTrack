@@ -132,39 +132,39 @@ class JobStatsViewController: UIViewController {
     }
 
     func setupData() {
+        let values = [self.offerCount, self.onSiteCount, self.phoneScreenCount, self.appliedCount, self.rejectedCount]
+        let colors: [UIColor] = [.offerBackground,
+                              .onSiteBackground,
+                              .phoneScreenBackground,
+                              .appliedBackground,
+                              .rejectedBackground]
+
         var entries = [PieChartDataEntry]()
-        entries.append(PieChartDataEntry(value: Double(self.offerCount), label: "Offer"))
-        entries.append(PieChartDataEntry(value: Double(self.onSiteCount), label: "On Site"))
-        entries.append(PieChartDataEntry(value: Double(self.phoneScreenCount), label: "Phone Screen"))
-        entries.append(PieChartDataEntry(value: Double(self.appliedCount), label: "Applied"))
-        entries.append(PieChartDataEntry(value: Double(self.rejectedCount), label: "Rejected"))
+        let pieChartLabels = ["Offer", "On Site", "Phone Screen", "Applied", "Rejected"]
+        var dataSetColors: [UIColor] = []
+
+        for i in 0..<values.count where values[i] != 0 {
+            entries.append(PieChartDataEntry(value: Double(values[i]), label: pieChartLabels[i]))
+            dataSetColors.append(colors[i])
+        }
 
         let dataSet = PieChartDataSet(entries: entries, label: nil)
-        dataSet.colors = [
-            .offerBackground,
-            .onSiteBackground,
-            .phoneScreenBackground,
-            .appliedBackground,
-            .rejectedBackground
-        ]
+        dataSet.colors = dataSetColors
 
         let formatter = NumberFormatter()
         formatter.minimumFractionDigits = 0
         dataSet.valueFormatter = (DefaultValueFormatter(formatter: formatter))
         dataSet.entryLabelFont = UIFont.boldSystemFont(ofSize: 12)
         dataSet.valueFont = UIFont.boldSystemFont(ofSize: 12)
-
         pieChart.data = PieChartData(dataSet: dataSet)
 
         var barChartEntries = [BarChartDataEntry]()
-        barChartEntries.append(BarChartDataEntry(x: 0, y: Double(self.offerCount)))
-        barChartEntries.append(BarChartDataEntry(x: 1, y: Double(self.onSiteCount)))
-        barChartEntries.append(BarChartDataEntry(x: 2, y: Double(self.phoneScreenCount)))
-        barChartEntries.append(BarChartDataEntry(x: 3, y: Double(self.appliedCount)))
-        barChartEntries.append(BarChartDataEntry(x: 4, y: Double(self.rejectedCount)))
+        for i in 0..<values.count {
+            barChartEntries.append(BarChartDataEntry(x: Double(i), y: Double(values[i])))
+        }
 
         let data = BarChartDataSet(entries: barChartEntries, label: "Total: \(companies.count)")
-        data.colors = dataSet.colors
+        data.colors = colors
         data.valueFormatter = (DefaultValueFormatter(formatter: formatter))
 
         barChart.data = BarChartData(dataSet: data)
