@@ -19,6 +19,7 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
     let jobsVC = JobsViewController()
     var jobsSortedByDate = [Company]()
     let statusPickerView = UIPickerView()
+    let generator = UIImpactFeedbackGenerator(style: .light)
     let statusPickerData = [
         "All",
         ApplicationStatus.applied.rawValue.capitalized,
@@ -209,20 +210,25 @@ extension HomeViewController: UISearchBarDelegate {
 
     // When user taps search bar
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        generator.impactOccurred()
         for button in filterVC.filterButtons {
             button.setTitleColor(.semanticFilterText, for: .normal)
             button.backgroundColor = .systemBackground
             button.isSelected = false
         }
 
-        statusPickerView.selectRow(0, inComponent: 0, animated: true)
-        filterVC.statusFieldLabel.text = "ALL"
-        filterVC.statusFieldLabel.textColor = .semanticFilterText
-        filterVC.statusField.layer.borderColor = UIColor.semanticFilterBorder.cgColor
-        filterVC.statusFieldDownArrow.textColor = filterVC.statusFieldLabel.textColor
+        if filterVC.statusFieldLabel.text != "ALL" {
+            statusPickerView.selectRow(0, inComponent: 0, animated: true)
+            filterVC.statusFieldLabel.text = "ALL"
+            filterVC.statusFieldLabel.textColor = .semanticFilterText
+            filterVC.statusField.layer.borderColor = UIColor.semanticFilterBorder.cgColor
+            filterVC.statusFieldDownArrow.textColor = filterVC.statusFieldLabel.textColor
+        }
 
-        jobsVC.companies = jobsSortedByDate
-        jobsVC.jobsCollectionView.reloadData()
+        if searchBar.text == "" {
+            jobsVC.companies = jobsSortedByDate
+            jobsVC.jobsCollectionView.reloadData()
+        }
     }
 
     // When user taps search button in keyboard
@@ -255,27 +261,33 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 
     // When user taps one of the filter buttons
     @objc func filterButtonTapped(_ sender: UIButton) {
-        filterVC.searchBar.resignFirstResponder()
-        filterVC.searchBar.text = nil
-        for button in filterVC.filterButtons {
-            button.setTitleColor(.semanticFilterText, for: .normal)
-            button.backgroundColor = .systemBackground
-            if !sender.isSelected {
+        if !sender.isSelected {
+            for button in filterVC.filterButtons {
+                button.setTitleColor(.semanticFilterText, for: .normal)
+                button.backgroundColor = .systemBackground
                 button.isSelected = false
             }
-        }
 
-        statusPickerView.selectRow(0, inComponent: 0, animated: true)
-        filterVC.statusFieldLabel.text = "ALL"
-        filterVC.statusFieldLabel.textColor = .semanticFilterText
-        filterVC.statusField.layer.borderColor = UIColor.semanticFilterBorder.cgColor
-        filterVC.statusFieldDownArrow.textColor = filterVC.statusFieldLabel.textColor
+            if filterVC.statusFieldLabel.text != "ALL" ||
+                filterVC.searchBar.isFirstResponder ||
+                statusPickerView.isFirstResponder ||
+                filterVC.searchBar.text != nil {
+                statusPickerView.selectRow(0, inComponent: 0, animated: true)
+                filterVC.statusFieldLabel.text = "ALL"
+                filterVC.statusFieldLabel.textColor = .semanticFilterText
+                filterVC.statusField.layer.borderColor = UIColor.semanticFilterBorder.cgColor
+                filterVC.statusFieldDownArrow.textColor = filterVC.statusFieldLabel.textColor
+                filterVC.searchBar.resignFirstResponder()
+                filterVC.statusField.resignFirstResponder()
+                filterVC.searchBar.text = nil
+            }
 
-        sender.setTitleColor(.white, for: .normal)
-        sender.backgroundColor = .tappedButton
+            generator.impactOccurred()
+            sender.setTitleColor(.white, for: .normal)
+            sender.backgroundColor = .tappedButton
+            sender.isSelected = true
 
-        // Sort based on which button user tapped
-        if !sender.isSelected {
+            // Sort based on which button user tapped
             if sender.titleLabel?.text == "BY DATE" {
                 jobsVC.companies = jobsSortedByDate.sorted {
                     $0.dateAdded > $1.dateAdded
@@ -293,7 +305,7 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
                     $0.isFavorite
                 }
             }
-            sender.isSelected = true
+
             jobsVC.jobsCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             jobsVC.jobsCollectionView.reloadData()
         }
