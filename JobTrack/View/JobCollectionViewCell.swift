@@ -131,6 +131,7 @@ extension JobCollectionViewCell {
         logoImageView.tintColor = .black
 
         logoActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        logoActivityIndicator.color = .black
         logoActivityIndicator.startAnimating()
 
         logoView.addSubview(logoImageView)

@@ -141,6 +141,7 @@ class AddJobViewController: UIViewController {
         logoImageView.layer.borderColor = UIColor.systemGray.cgColor
 
         logoActivityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        logoActivityIndicator.color = .black
 
         setupTextField(for: companyNameField, placeHolder: "Company")
         setupTextField(for: positionField, placeHolder: "Position")
