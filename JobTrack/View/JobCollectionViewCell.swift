@@ -36,6 +36,11 @@ class JobCollectionViewCell: UICollectionViewCell {
         layout()
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        logoImageView.image = nil
+    }
+
     // Set colors for all UI
     func updateColors(for company: Company) {
         switch company.applicationStatus {

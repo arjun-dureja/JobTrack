@@ -17,7 +17,11 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
     let headerVC = HeaderViewController()
     let filterVC = FilterViewController()
     let jobsVC = JobsViewController()
-    var jobsSortedByDate = [Company]()
+    var allCompanies = [Company]() {
+        didSet {
+            jobsVC.companies = allCompanies
+        }
+    }
     let statusPickerView = UIPickerView()
     let generator = UIImpactFeedbackGenerator(style: .light)
     let statusPickerData = [
@@ -50,18 +54,13 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
 
         // Fetch companies from core data and sort by date
         do {
-            jobsVC.companies = try context.fetch(Company.fetchRequest())
-            jobsVC.companies = jobsVC.companies.sorted {
+            self.allCompanies = try context.fetch(Company.fetchRequest())
+            self.allCompanies = self.allCompanies.sorted {
                 $0.dateAdded > $1.dateAdded
             }
-
-            jobsVC.jobsCollectionView.reloadData()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-
-        // Save a copy of companies
-        self.jobsSortedByDate = jobsVC.companies
     }
 
     // Add header VC as child
@@ -194,14 +193,10 @@ extension HomeViewController: AddJobDelegate {
             print(error)
         }
 
+        allCompanies.append(company)
         filterVC.dateButton.sendActions(for: .touchUpInside)
-        jobsVC.companies = jobsSortedByDate
-
-        jobsVC.companies.insert(company, at: 0)
-        jobsVC.jobsCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-        jobsVC.jobsCollectionView.reloadData()
-
-        self.jobsSortedByDate = jobsVC.companies
+        let success = UINotificationFeedbackGenerator()
+        success.notificationOccurred(.success)
     }
 
     // Unused delegate function - used in Jobs VC
@@ -231,8 +226,7 @@ extension HomeViewController: UISearchBarDelegate {
         }
 
         if searchBar.text == "" {
-            jobsVC.companies = jobsSortedByDate
-            jobsVC.jobsCollectionView.reloadData()
+            jobsVC.companies = allCompanies
         }
     }
 
@@ -248,11 +242,9 @@ extension HomeViewController: UISearchBarDelegate {
 
     // Search for results as user types
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        jobsVC.companies = jobsSortedByDate.filter {
+        jobsVC.companies = allCompanies.filter {
             $0.companyName.lowercased().hasPrefix(searchText.lowercased())
         }
-
-        jobsVC.jobsCollectionView.reloadData()
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -266,54 +258,53 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 
     // When user taps one of the filter buttons
     @objc func filterButtonTapped(_ sender: UIButton) {
-        if !sender.isSelected {
-            for button in filterVC.filterButtons {
-                button.setTitleColor(.semanticFilterText, for: .normal)
-                button.backgroundColor = .systemBackground
+        for button in filterVC.filterButtons {
+            button.setTitleColor(.semanticFilterText, for: .normal)
+            button.backgroundColor = .systemBackground
+            if !sender.isSelected {
                 button.isSelected = false
             }
-
-            if filterVC.statusFieldLabel.text != "ALL" ||
-                filterVC.searchBar.isFirstResponder ||
-                statusPickerView.isFirstResponder ||
-                filterVC.searchBar.text != nil {
-                statusPickerView.selectRow(0, inComponent: 0, animated: true)
-                filterVC.statusFieldLabel.text = "ALL"
-                filterVC.statusFieldLabel.textColor = .semanticFilterText
-                filterVC.statusField.layer.borderColor = UIColor.semanticFilterBorder.cgColor
-                filterVC.statusFieldDownArrow.textColor = filterVC.statusFieldLabel.textColor
-                filterVC.searchBar.resignFirstResponder()
-                filterVC.statusField.resignFirstResponder()
-                filterVC.searchBar.text = nil
-            }
-
-            generator.impactOccurred()
-            sender.setTitleColor(.white, for: .normal)
-            sender.backgroundColor = .tappedButton
-            sender.isSelected = true
-
-            // Sort based on which button user tapped
-            if sender.titleLabel?.text == FilterStatus.byDate() {
-                jobsVC.companies = jobsSortedByDate.sorted {
-                    $0.dateAdded > $1.dateAdded
-                }
-            } else if sender.titleLabel?.text == FilterStatus.byStatus() {
-                jobsVC.companies = jobsSortedByDate.sorted {
-                    $0.applicationStatus < $1.applicationStatus
-                }
-            } else if sender.titleLabel?.text == FilterStatus.aToZ() {
-                jobsVC.companies = jobsSortedByDate.sorted {
-                    $0.companyName.lowercased() < $1.companyName.lowercased()
-                }
-            } else if sender.titleLabel?.text == FilterStatus.favorites() {
-                jobsVC.companies = jobsSortedByDate.filter {
-                    $0.isFavorite
-                }
-            }
-
-            jobsVC.jobsCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-            jobsVC.jobsCollectionView.reloadData()
         }
+
+        if filterVC.statusFieldLabel.text != "ALL" ||
+            filterVC.searchBar.isFirstResponder ||
+            statusPickerView.isFirstResponder ||
+            filterVC.searchBar.text != nil {
+            statusPickerView.selectRow(0, inComponent: 0, animated: true)
+            filterVC.statusFieldLabel.text = "ALL"
+            filterVC.statusFieldLabel.textColor = .semanticFilterText
+            filterVC.statusField.layer.borderColor = UIColor.semanticFilterBorder.cgColor
+            filterVC.statusFieldDownArrow.textColor = filterVC.statusFieldLabel.textColor
+            filterVC.searchBar.resignFirstResponder()
+            filterVC.statusField.resignFirstResponder()
+            filterVC.searchBar.text = nil
+        }
+
+        generator.impactOccurred()
+        sender.setTitleColor(.white, for: .normal)
+        sender.backgroundColor = .tappedButton
+        sender.isSelected = true
+
+        // Sort based on which button user tapped
+        if sender.titleLabel?.text == FilterStatus.byDate() {
+            jobsVC.companies = allCompanies.sorted {
+                $0.dateAdded > $1.dateAdded
+            }
+        } else if sender.titleLabel?.text == FilterStatus.byStatus() {
+            jobsVC.companies = allCompanies.sorted {
+                $0.applicationStatus < $1.applicationStatus
+            }
+        } else if sender.titleLabel?.text == FilterStatus.aToZ() {
+            jobsVC.companies = allCompanies.sorted {
+                $0.companyName.lowercased() < $1.companyName.lowercased()
+            }
+        } else if sender.titleLabel?.text == FilterStatus.favorites() {
+            jobsVC.companies = allCompanies.filter {
+                $0.isFavorite
+            }
+        }
+
+        jobsVC.jobsCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
     }
 
     // User selected filter by status picker
@@ -340,32 +331,30 @@ extension HomeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         // Sort based on which status user selected
         switch row {
         case 0:
-            jobsVC.companies = jobsSortedByDate
+            jobsVC.companies = allCompanies
         case 1:
-            jobsVC.companies = jobsSortedByDate.filter {
+            jobsVC.companies = allCompanies.filter {
                 $0.applicationStatus == .applied
             }
         case 2:
-            jobsVC.companies = jobsSortedByDate.filter {
+            jobsVC.companies = allCompanies.filter {
                 $0.applicationStatus == .phoneScreen
             }
         case 3:
-            jobsVC.companies = jobsSortedByDate.filter {
+            jobsVC.companies = allCompanies.filter {
                 $0.applicationStatus == .onSite
             }
         case 4:
-            jobsVC.companies = jobsSortedByDate.filter {
+            jobsVC.companies = allCompanies.filter {
                 $0.applicationStatus == .offer
             }
         case 5:
-            jobsVC.companies = jobsSortedByDate.filter {
+            jobsVC.companies = allCompanies.filter {
                 $0.applicationStatus == .rejected
             }
         default:
             break
         }
-
-        jobsVC.jobsCollectionView.reloadData()
     }
 
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -388,9 +377,9 @@ extension HomeViewController: FavoriteButton {
     // When user taps the favorite button
     func favoriteButtonTapped(at indexPath: IndexPath) {
         self.jobsVC.companies[indexPath.item].isFavorite = true
-        for i in 0..<jobsSortedByDate.count
-        where jobsSortedByDate[i].dateAdded == jobsVC.companies[indexPath.item].dateAdded {
-            jobsSortedByDate[i].isFavorite = true
+        for i in 0..<allCompanies.count
+        where allCompanies[i].dateAdded == jobsVC.companies[indexPath.item].dateAdded {
+            allCompanies[i].isFavorite = true
             break
         }
     }
@@ -398,9 +387,9 @@ extension HomeViewController: FavoriteButton {
     // When user taps the favorite button to un-favorite
     func favoriteButtonUnTapped(at indexPath: IndexPath) {
         self.jobsVC.companies[indexPath.item].isFavorite = false
-        for i in 0..<jobsSortedByDate.count
-        where jobsSortedByDate[i].dateAdded == jobsVC.companies[indexPath.item].dateAdded {
-            jobsSortedByDate[i].isFavorite = false
+        for i in 0..<allCompanies.count
+        where allCompanies[i].dateAdded == jobsVC.companies[indexPath.item].dateAdded {
+            allCompanies[i].isFavorite = false
             break
         }
     }
@@ -412,6 +401,15 @@ extension HomeViewController: DeleteButtonDelegate, EditJobDelegate {
 
     // User deleted a job
     func deleteTapped(at company: Company) {
+        let success = UINotificationFeedbackGenerator()
+        success.notificationOccurred(.success)
+
+        // Remove locally
+        for i in 0..<allCompanies.count where allCompanies[i].dateAdded == company.dateAdded {
+            allCompanies.remove(at: i)
+            break
+        }
+
         self.context.delete(company)
 
         // Save core data context
@@ -420,18 +418,12 @@ extension HomeViewController: DeleteButtonDelegate, EditJobDelegate {
         } catch let error as NSError {
             print(error)
         }
-
-        // Remove locally
-        for i in 0..<jobsSortedByDate.count where jobsSortedByDate[i].dateAdded == company.dateAdded {
-            jobsSortedByDate.remove(at: i)
-            break
-        }
     }
 
     // User finished editing a job
     func jobEdited(company: Company) {
-        for i in 0..<jobsSortedByDate.count where jobsSortedByDate[i].dateAdded == company.dateAdded {
-            jobsSortedByDate[i] = company
+        for i in 0..<allCompanies.count where allCompanies[i].dateAdded == company.dateAdded {
+            allCompanies[i] = company
             break
         }
     }

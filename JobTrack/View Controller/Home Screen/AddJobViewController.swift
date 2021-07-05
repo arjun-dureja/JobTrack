@@ -92,9 +92,11 @@ class AddJobViewController: UIViewController {
         companyNameField.text = company.companyName
         positionField.text = company.jobPosition
         applicationStatusField.text = company.applicationStatus.rawValue.capitalized
+        updateDateField(date: company.dateAdded)
         datePicker.date = company.dateAdded
+        dateField.isUserInteractionEnabled = false
 
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.35) {
             self.companyNameField.resignFirstResponder()
             self.companyNameField.isUserInteractionEnabled = false
         }
@@ -160,7 +162,9 @@ class AddJobViewController: UIViewController {
 
         dateField.inputView = datePicker
         dateField.tintColor = .clear
-        updateDateField(date: Date())
+        if !isEditingEnabled {
+            updateDateField(date: Date())
+        }
 
         applicationStatusPicker.delegate = self
         applicationStatusPicker.dataSource = self
@@ -362,7 +366,7 @@ class AddJobViewController: UIViewController {
     func updateDateField(date: Date) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
-        dateField.text = "Date: \(dateFormatter.string(from: date))"
+        dateField.text = "Date Added: \(dateFormatter.string(from: date))"
     }
 }
 

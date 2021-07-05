@@ -15,7 +15,11 @@ class JobsViewController: UIViewController {
     var jobsCollectionView: UICollectionView!
     let cvLayout = UICollectionViewFlowLayout()
     let reuseIdentifier = "Cell"
-    var companies = [Company]()
+    var companies = [Company]() {
+        didSet {
+            jobsCollectionView.reloadData()
+        }
+    }
     weak var delegate: FavoriteButton!
     weak var deleteDelegate: DeleteButtonDelegate!
     weak var editDelegate: EditJobDelegate!
@@ -122,6 +126,7 @@ extension JobsViewController: UICollectionViewDelegate,
                 image: UIImage(systemName: "trash"),
                 attributes: .destructive
             ) { [weak self] _ in
+                guard let self = self else { return }
                 let ac = UIAlertController(
                     title: "Are you sure you want to delete this job?",
                     message: nil,
@@ -132,14 +137,12 @@ extension JobsViewController: UICollectionViewDelegate,
                     return
                 }))
 
-                ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { [weak self] _ in
-                    guard let self = self else { return }
+                ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: {  _ in
                     self.deleteDelegate.deleteTapped(at: self.companies[indexPath.item])
-                    self.companies.remove(at: indexPath.item)
                     collectionView.reloadData()
                 }))
 
-                self?.present(ac, animated: true)
+                self.present(ac, animated: true)
             }
 
             return UIMenu(title: "", children: [edit, delete])
@@ -193,7 +196,6 @@ extension JobsViewController: AddJobDelegate {
     func saveButtonTapped(company: Company) {
         for i in 0..<companies.count where companies[i].dateAdded == company.dateAdded {
             companies[i] = company
-            jobsCollectionView.reloadData()
             break
         }
         self.editDelegate.jobEdited(company: company)
