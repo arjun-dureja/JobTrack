@@ -31,7 +31,7 @@ class LaunchViewController: UIViewController {
     // Zoom in logo and fade away
     func animate() {
         // Zooming by 3x
-        UIView.animate(withDuration: 1) {
+        UIView.animate(withDuration: 0.75) {
             let size = self.view.frame.size.width * 3
             let diffX = size - self.view.frame.size.width
             let diffY = self.view.frame.size.height - size
@@ -40,7 +40,7 @@ class LaunchViewController: UIViewController {
         }
 
         // Fading and presenting home VC
-        UIView.animate(withDuration: 1.5, animations: {
+        UIView.animate(withDuration: 1, animations: {
             self.imageView.alpha = 0
         }, completion: { [weak self] done in
             if done {

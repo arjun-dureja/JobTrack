@@ -102,6 +102,7 @@ class JobStatsViewController: UIViewController {
         pieChart.highlightPerTapEnabled = false
         pieChart.legend.enabled = false
         pieChart.animate(xAxisDuration: 1.5, yAxisDuration: 1.5, easingOption: .easeInOutQuart)
+        pieChart.backgroundColor = .semanticSettingsBackground
 
         pieChartTitle.translatesAutoresizingMaskIntoConstraints = false
         pieChartTitle.text = "Pie Chart"
@@ -120,6 +121,7 @@ class JobStatsViewController: UIViewController {
         barChart.xAxis.granularity = 1
         barChart.xAxis.drawGridLinesEnabled = false
         barChart.animate(xAxisDuration: 1.5, yAxisDuration: 1.5, easingOption: .easeInOutQuart)
+        barChart.backgroundColor = .semanticSettingsBackground
 
         barChartTitle.translatesAutoresizingMaskIntoConstraints = false
         barChartTitle.text = "Bar Chart"
@@ -217,15 +219,9 @@ class JobStatsViewController: UIViewController {
     // Chart download tapped
     @objc func pieChartDownloadTapped() {
         chartToShare = 0
-        let renderer = UIGraphicsImageRenderer(size: self.pieChart.bounds.size)
-        let image = renderer.image { [weak self] _ in
-            guard let self = self else { return }
-            self.pieChart.drawHierarchy(in: self.pieChart.bounds, afterScreenUpdates: true)
-        }
-
+        let image = renderImage(for: pieChart)
         let ac = UIActivityViewController(activityItems: [image, self], applicationActivities: nil)
         present(ac, animated: true)
-
         if let popOver = ac.popoverPresentationController {
             popOver.sourceView = pieChartDownloadBtn
         }
@@ -233,17 +229,18 @@ class JobStatsViewController: UIViewController {
 
     @objc func barChartDownloadTapped() {
         chartToShare = 1
-        let renderer = UIGraphicsImageRenderer(size: self.barChart.bounds.size)
-        let image = renderer.image { [weak self] _ in
-            guard let self = self else { return }
-            self.barChart.drawHierarchy(in: self.barChart.bounds, afterScreenUpdates: true)
-        }
-
+        let image = renderImage(for: barChart)
         let ac = UIActivityViewController(activityItems: [image, self], applicationActivities: nil)
         present(ac, animated: true)
-
         if let popOver = ac.popoverPresentationController {
             popOver.sourceView = barChartDownloadBtn
+        }
+    }
+
+    func renderImage(for chart: ChartViewBase) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: chart.bounds.size)
+        return renderer.image { ctx in
+            chart.drawHierarchy(in: chart.bounds, afterScreenUpdates: true)
         }
     }
 
@@ -267,20 +264,10 @@ extension JobStatsViewController: UIActivityItemSource {
         let metadata = LPLinkMetadata()
         var chartImage = UIImage()
         if chartToShare == 0 {
-            let renderer = UIGraphicsImageRenderer(size: self.pieChart.bounds.size)
-            chartImage = renderer.image { [weak self] _ in
-                guard let self = self else { return }
-                self.pieChart.drawHierarchy(in: self.pieChart.bounds, afterScreenUpdates: true)
-            }
-
+            chartImage = renderImage(for: pieChart)
             metadata.title = "Pie Chart"
         } else {
-            let renderer = UIGraphicsImageRenderer(size: self.barChart.bounds.size)
-            chartImage = renderer.image { [weak self] _ in
-                guard let self = self else { return }
-                self.barChart.drawHierarchy(in: self.barChart.bounds, afterScreenUpdates: true)
-            }
-
+            chartImage = renderImage(for: barChart)
             metadata.title = "Bar Chart"
         }
 
