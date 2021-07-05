@@ -139,7 +139,6 @@ extension JobsViewController: UICollectionViewDelegate,
 
                 ac.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: {  _ in
                     self.deleteDelegate.deleteTapped(at: self.companies[indexPath.item])
-                    collectionView.reloadData()
                 }))
 
                 self.present(ac, animated: true)

@@ -50,6 +50,7 @@ class AddJobViewController: UIViewController {
 
     var isEditingEnabled = false
     var companyToEdit: Company!
+    var dateEdited = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,7 +95,6 @@ class AddJobViewController: UIViewController {
         applicationStatusField.text = company.applicationStatus.rawValue.capitalized
         updateDateField(date: company.dateAdded)
         datePicker.date = company.dateAdded
-        dateField.isUserInteractionEnabled = false
 
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.35) {
             self.companyNameField.resignFirstResponder()
@@ -360,7 +360,25 @@ class AddJobViewController: UIViewController {
     }
 
     @objc func handleDatePicker(_ datePicker: UIDatePicker) {
-        updateDateField(date: datePicker.date)
+        dateEdited = true
+        updateDateField(date: getNewDate(from: datePicker.date))
+    }
+
+    func getNewDate(from date: Date) -> Date {
+        let calendar = Calendar.current
+        let currentDate = Date()
+        let hour = calendar.component(.hour, from: currentDate)
+        let minutes = calendar.component(.minute, from: currentDate)
+        let seconds = calendar.component(.second, from: currentDate)
+        if let newDate = Calendar.current.date(
+            bySettingHour: hour,
+            minute: minutes,
+            second: seconds,
+            of: date
+        ) {
+            return newDate
+        }
+        return date
     }
 
     func updateDateField(date: Date) {
@@ -429,13 +447,13 @@ extension AddJobViewController {
                 jobDelegate.addButtonTapped(
                     companyName: companyName,
                     jobPosition: jobPosition,
-                    dateAdded: datePicker.date,
+                    dateAdded: getNewDate(from: datePicker.date),
                     applicationStatus: applicationStatus
                 )
             } else {
                 companyToEdit.jobPosition = jobPosition
                 companyToEdit.applicationStatus = applicationStatus
-                companyToEdit.dateAdded = datePicker.date
+                companyToEdit.dateAdded = dateEdited ? getNewDate(from: datePicker.date) : datePicker.date
                 jobDelegate.saveButtonTapped(company: companyToEdit)
             }
         }

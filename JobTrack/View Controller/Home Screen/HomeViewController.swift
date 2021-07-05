@@ -55,11 +55,23 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
         // Fetch companies from core data and sort by date
         do {
             self.allCompanies = try context.fetch(Company.fetchRequest())
-            self.allCompanies = self.allCompanies.sorted {
-                $0.dateAdded > $1.dateAdded
-            }
+            self.sortAllCompaniesByDate()
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
+        }
+    }
+
+    func sortAllCompaniesByDate() {
+        allCompanies = allCompanies.sorted {
+            $0.dateAdded > $1.dateAdded
+        }
+    }
+
+    func saveCoreDateContext() {
+        do {
+            try self.context.save()
+        } catch let error as NSError {
+            print(error)
         }
     }
 
@@ -187,16 +199,14 @@ extension HomeViewController: AddJobDelegate {
         company.isFavorite = false
         company.dateAdded = dateAdded
 
-        do {
-            try self.context.save()
-        } catch let error as NSError {
-            print(error)
-        }
-
         allCompanies.append(company)
+        sortAllCompaniesByDate()
         filterVC.dateButton.sendActions(for: .touchUpInside)
+
         let success = UINotificationFeedbackGenerator()
         success.notificationOccurred(.success)
+
+        saveCoreDateContext()
     }
 
     // Unused delegate function - used in Jobs VC
@@ -413,18 +423,18 @@ extension HomeViewController: DeleteButtonDelegate, EditJobDelegate {
         self.context.delete(company)
 
         // Save core data context
-        do {
-            try self.context.save()
-        } catch let error as NSError {
-            print(error)
-        }
+        saveCoreDateContext()
     }
 
     // User finished editing a job
     func jobEdited(company: Company) {
+        let success = UINotificationFeedbackGenerator()
+        success.notificationOccurred(.success)
         for i in 0..<allCompanies.count where allCompanies[i].dateAdded == company.dateAdded {
             allCompanies[i] = company
             break
         }
+        sortAllCompaniesByDate()
+        saveCoreDateContext()
     }
 }
