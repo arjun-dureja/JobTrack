@@ -68,11 +68,7 @@ class HomeViewController: UIViewController, UIPopoverPresentationControllerDeleg
     }
 
     func saveCoreDateContext() {
-        do {
-            try self.context.save()
-        } catch let error as NSError {
-            print(error)
-        }
+        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
 
     // Add header VC as child
@@ -386,22 +382,22 @@ extension HomeViewController: FavoriteButton {
 
     // When user taps the favorite button
     func favoriteButtonTapped(at indexPath: IndexPath) {
-        self.jobsVC.companies[indexPath.item].isFavorite = true
-        for i in 0..<allCompanies.count
-        where allCompanies[i].dateAdded == jobsVC.companies[indexPath.item].dateAdded {
-            allCompanies[i].isFavorite = true
-            break
+        let company = self.jobsVC.companies[indexPath.item]
+        company.isFavorite = true
+        if let index = allCompanies.firstIndex(where: { $0.objectID == company.objectID }) {
+            allCompanies[index].isFavorite = true
         }
+        saveCoreDateContext()
     }
 
     // When user taps the favorite button to un-favorite
     func favoriteButtonUnTapped(at indexPath: IndexPath) {
-        self.jobsVC.companies[indexPath.item].isFavorite = false
-        for i in 0..<allCompanies.count
-        where allCompanies[i].dateAdded == jobsVC.companies[indexPath.item].dateAdded {
-            allCompanies[i].isFavorite = false
-            break
+        let company = self.jobsVC.companies[indexPath.item]
+        company.isFavorite = false
+        if let index = allCompanies.firstIndex(where: { $0.objectID == company.objectID }) {
+            allCompanies[index].isFavorite = false
         }
+        saveCoreDateContext()
     }
 
 }
@@ -415,10 +411,7 @@ extension HomeViewController: DeleteButtonDelegate, EditJobDelegate {
         success.notificationOccurred(.success)
 
         // Remove locally
-        for i in 0..<allCompanies.count where allCompanies[i].dateAdded == company.dateAdded {
-            allCompanies.remove(at: i)
-            break
-        }
+        allCompanies.removeAll { $0.objectID == company.objectID }
 
         self.context.delete(company)
 
@@ -430,9 +423,8 @@ extension HomeViewController: DeleteButtonDelegate, EditJobDelegate {
     func jobEdited(company: Company) {
         let success = UINotificationFeedbackGenerator()
         success.notificationOccurred(.success)
-        for i in 0..<allCompanies.count where allCompanies[i].dateAdded == company.dateAdded {
-            allCompanies[i] = company
-            break
+        if let index = allCompanies.firstIndex(where: { $0.objectID == company.objectID }) {
+            allCompanies[index] = company
         }
         sortAllCompaniesByDate()
         saveCoreDateContext()

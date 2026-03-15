@@ -153,12 +153,13 @@ class JobStatsViewController: UIViewController {
         let dataSet = PieChartDataSet(entries: entries, label: "")
         dataSet.colors = dataSetColors
 
-        let formatter = NumberFormatter()
-        formatter.minimumFractionDigits = 0
-        dataSet.valueFormatter = (DefaultValueFormatter(formatter: formatter))
+        let formatter = WholeNumberValueFormatter()
+        dataSet.valueFormatter = formatter
         dataSet.entryLabelFont = UIFont.boldSystemFont(ofSize: 12)
         dataSet.valueFont = UIFont.boldSystemFont(ofSize: 12)
-        pieChart.data = PieChartData(dataSet: dataSet)
+        let pieChartData = PieChartData(dataSet: dataSet)
+        pieChartData.setValueFormatter(formatter)
+        pieChart.data = pieChartData
 
         var barChartEntries = [BarChartDataEntry]()
         for i in 0..<values.count {
@@ -167,9 +168,11 @@ class JobStatsViewController: UIViewController {
 
         let data = BarChartDataSet(entries: barChartEntries, label: "Total: \(companies.count)")
         data.colors = colors
-        data.valueFormatter = (DefaultValueFormatter(formatter: formatter))
+        data.valueFormatter = formatter
 
-        barChart.data = BarChartData(dataSet: data)
+        let barChartData = BarChartData(dataSet: data)
+        barChartData.setValueFormatter(formatter)
+        barChart.data = barChartData
 
     }
 
@@ -275,5 +278,25 @@ extension JobStatsViewController: UIActivityItemSource {
         let imageProvider = NSItemProvider(object: image)
         metadata.imageProvider = imageProvider
         return metadata
+    }
+}
+
+private final class WholeNumberValueFormatter: NSObject, ValueFormatter {
+    private let formatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 0
+        formatter.usesGroupingSeparator = false
+        return formatter
+    }()
+
+    func stringForValue(
+        _ value: Double,
+        entry: ChartDataEntry,
+        dataSetIndex: Int,
+        viewPortHandler: ViewPortHandler?
+    ) -> String {
+        formatter.string(from: NSNumber(value: value)) ?? "\(Int(value.rounded()))"
     }
 }

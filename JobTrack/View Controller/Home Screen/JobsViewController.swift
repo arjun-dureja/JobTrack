@@ -194,9 +194,8 @@ extension JobsViewController: AddJobDelegate {
     }
 
     func saveButtonTapped(company: Company) {
-        for i in 0..<companies.count where companies[i].dateAdded == company.dateAdded {
-            companies[i] = company
-            break
+        if let index = companies.firstIndex(where: { $0.objectID == company.objectID }) {
+            companies[index] = company
         }
         self.editDelegate.jobEdited(company: company)
     }

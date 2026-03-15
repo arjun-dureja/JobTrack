@@ -78,7 +78,7 @@ class ReportProblemViewController: UIViewController {
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
-            mail.setToRecipients(["jobtrackfeedback@gmail.com"])
+            mail.setToRecipients(["arjun.dureja1000@gmail.com"])
             mail.setSubject("JobTrack Bug Report / Feedback")
             mail.setMessageBody(textView.text, isHTML: true)
 

@@ -52,8 +52,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          creates and returns a container, having loaded the store for the
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
-         */
+        */
         let container = NSPersistentCloudKitContainer(name: "JobTracker")
+        if let description = container.persistentStoreDescriptions.first {
+            description.shouldMigrateStoreAutomatically = true
+            description.shouldInferMappingModelAutomatically = true
+        }
         container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
@@ -67,20 +71,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        container.viewContext.undoManager = nil
         return container
     }()
 
     // MARK: - Core Data Saving support
     func saveContext () {
         let context = persistentContainer.viewContext
-        context.automaticallyMergesChangesFromParent = true
         if context.hasChanges {
             do {
                 try context.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
                 let nserror = error as NSError
-                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                #if DEBUG
+                assertionFailure("Unresolved error \(nserror), \(nserror.userInfo)")
+                #endif
+                print("Core Data save failed: \(nserror), \(nserror.userInfo)")
             }
         }
     }

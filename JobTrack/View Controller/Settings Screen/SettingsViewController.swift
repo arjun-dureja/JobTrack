@@ -73,11 +73,21 @@ class SettingsViewController: UIViewController {
     }
 
     func style() {
-        navigationController?.navigationBar.barTintColor = .tappedButton
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.titleTextAttributes = [
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.configureWithOpaqueBackground()
+        navigationBarAppearance.backgroundColor = .tappedButton
+        navigationBarAppearance.titleTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor.white
         ]
+        navigationBarAppearance.largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.white
+        ]
+
+        navigationController?.navigationBar.standardAppearance = navigationBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+        navigationController?.navigationBar.compactAppearance = navigationBarAppearance
+        navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.isTranslucent = false
 
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = .white
@@ -290,11 +300,21 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
                 let vc = TipViewController()
                 let navigationController = UINavigationController(rootViewController: vc)
                 navigationController.modalPresentationStyle = .automatic
-                navigationController.navigationBar.barTintColor = .tappedButton
-                navigationController.navigationBar.isTranslucent = false
-                navigationController.navigationBar.titleTextAttributes = [
+
+                let navigationBarAppearance = UINavigationBarAppearance()
+                navigationBarAppearance.configureWithOpaqueBackground()
+                navigationBarAppearance.backgroundColor = .tappedButton
+                navigationBarAppearance.titleTextAttributes = [
                     NSAttributedString.Key.foregroundColor: UIColor.white
                 ]
+                navigationBarAppearance.largeTitleTextAttributes = [
+                    NSAttributedString.Key.foregroundColor: UIColor.white
+                ]
+                navigationController.navigationBar.standardAppearance = navigationBarAppearance
+                navigationController.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+                navigationController.navigationBar.compactAppearance = navigationBarAppearance
+                navigationController.navigationBar.tintColor = .white
+                navigationController.navigationBar.isTranslucent = false
 
                 present(navigationController, animated: true)
             }
