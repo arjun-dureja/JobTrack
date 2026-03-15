@@ -13,10 +13,12 @@ public class ImageCache {
     public static let shared = ImageCache()
     public let cache = NSCache<NSString, UIImage>()
     private let utilityQueue = DispatchQueue.global(qos: .utility)
+    private let logoDevToken = "pk_QxcYtVpuTg-wQQPQsuT22w"
 
     final func loadImage(companyName: String, completion: @escaping (UIImage?, Bool) -> Swift.Void) {
         utilityQueue.async {
-            let key = companyName.replacingOccurrences(of: " ", with: "").lowercased() as NSString
+            let trimmedCompanyName = companyName.trimmingCharacters(in: .whitespacesAndNewlines)
+            let key = trimmedCompanyName.lowercased() as NSString
             // Check if image exists in cache first
             if let cachedImage = ImageCache.shared.cache.object(forKey: key) {
                 DispatchQueue.main.async {
@@ -26,15 +28,9 @@ public class ImageCache {
                 return
             }
 
-            let urlString = "https://logo.clearbit.com/\(key as String)"
-            var domains = [".com", ".org", ".ca", ".net", ".io", ".co", ".uk", ".tech", ".network"]
-            // If user enters a website instead of a company name
-            if companyName.contains(".") { domains = [""] }
-
-            for domain in domains {
-                if let imageUrl = URL(string: urlString.appending(domain)),
-                   let imageData = try? Data(contentsOf: imageUrl) {
-                    guard let image = UIImage(data: imageData) else { break }
+            for imageUrl in self.logoURLs(for: trimmedCompanyName) {
+                if let imageData = try? Data(contentsOf: imageUrl),
+                   let image = UIImage(data: imageData) {
                     DispatchQueue.main.async {
                         self.cache.setObject(image, forKey: key)
                         completion(image, false)
@@ -55,5 +51,42 @@ public class ImageCache {
                 completion(image, false)
             }
         }
+    }
+
+    private func logoURLs(for companyName: String) -> [URL] {
+        var urls = [URL]()
+
+        if let domain = normalizedDomain(from: companyName),
+           let domainURL = URL(string: "https://img.logo.dev/\(domain)?token=\(logoDevToken)&format=png&fallback=404") {
+            urls.append(domainURL)
+        }
+
+        if let encodedCompanyName = companyName.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
+           let nameURL = URL(
+            string: "https://img.logo.dev/name/\(encodedCompanyName)?token=\(logoDevToken)&format=png&fallback=404"
+           ) {
+            urls.append(nameURL)
+        }
+
+        return urls
+    }
+
+    private func normalizedDomain(from companyName: String) -> String? {
+        let trimmedCompanyName = companyName.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard trimmedCompanyName.contains(".") else { return nil }
+
+        if let url = URL(string: trimmedCompanyName),
+           let host = url.host?.trimmingCharacters(in: CharacterSet(charactersIn: "/")) {
+            return host.replacingOccurrences(of: "www.", with: "")
+        }
+
+        let strippedDomain = trimmedCompanyName
+            .replacingOccurrences(of: "https://", with: "")
+            .replacingOccurrences(of: "http://", with: "")
+            .components(separatedBy: "/")
+            .first?
+            .replacingOccurrences(of: "www.", with: "")
+
+        return strippedDomain?.isEmpty == false ? strippedDomain : nil
     }
 }

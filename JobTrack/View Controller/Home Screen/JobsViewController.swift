@@ -17,7 +17,7 @@ class JobsViewController: UIViewController {
     let reuseIdentifier = "Cell"
     var companies = [Company]() {
         didSet {
-            jobsCollectionView.reloadData()
+            jobsCollectionView?.reloadData()
         }
     }
     weak var delegate: FavoriteButton!
@@ -30,6 +30,7 @@ class JobsViewController: UIViewController {
         super.viewDidLoad()
         style()
         layout()
+        jobsCollectionView.reloadData()
     }
 
     override func viewWillLayoutSubviews() {

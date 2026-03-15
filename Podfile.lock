@@ -1,22 +1,26 @@
 PODS:
-  - Charts (3.6.0):
-    - Charts/Core (= 3.6.0)
-  - Charts/Core (3.6.0)
+  - Charts (4.1.0):
+    - Charts/Core (= 4.1.0)
+  - Charts/Core (4.1.0):
+    - SwiftAlgorithms (~> 1.0)
+  - SwiftAlgorithms (1.0.0)
   - SwiftCSVExport (2.6.0)
 
 DEPENDENCIES:
-  - Charts
+  - Charts (~> 4.1)
   - SwiftCSVExport
 
 SPEC REPOS:
   trunk:
     - Charts
+    - SwiftAlgorithms
     - SwiftCSVExport
 
 SPEC CHECKSUMS:
-  Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
+  Charts: ce0768268078eee0336f122c3c4ca248e4e204c5
+  SwiftAlgorithms: 38dda4731d19027fdeee1125f973111bf3386b53
   SwiftCSVExport: d9db3fb80484115028792f8d539445e3fb2c0ecb
 
-PODFILE CHECKSUM: 128f19ae262fe9324de507845f504378c88017af
+PODFILE CHECKSUM: 6826f42a57bf0bf3816b5b2318b9639ce142efad
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.16.2

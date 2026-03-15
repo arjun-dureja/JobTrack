@@ -1,3 +1,4 @@
 ${PODS_ROOT}/Target Support Files/Pods-JobTrack/Pods-JobTrack-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Charts/Charts.framework
+${BUILT_PRODUCTS_DIR}/SwiftAlgorithms/Algorithms.framework
 ${BUILT_PRODUCTS_DIR}/SwiftCSVExport/SwiftCSVExport.framework

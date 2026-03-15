@@ -22,9 +22,9 @@ class JobCollectionViewCell: UICollectionViewCell {
     let favoriteButton = UIButton()
     let dateAdded = UILabel()
 
-    var company: Company!
-    var indexPath: IndexPath!
-    weak var favoriteDelegate: FavoriteButtonDelegate!
+    private var company: Company?
+    var indexPath: IndexPath?
+    weak var favoriteDelegate: FavoriteButtonDelegate?
 
     // MARK: - Init
 
@@ -39,6 +39,8 @@ class JobCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         logoImageView.image = nil
+        company = nil
+        indexPath = nil
     }
 
     // Set colors for all UI
@@ -79,6 +81,7 @@ class JobCollectionViewCell: UICollectionViewCell {
     // If user changed to dark mode
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        guard let company = company else { return }
         updateColors(for: company)
     }
 
@@ -215,6 +218,7 @@ extension JobCollectionViewCell {
 
     // Favorite button tapped
     @objc func favoriteTapped(_ sender: UIButton) {
+        guard let favoriteDelegate = favoriteDelegate, let indexPath = indexPath else { return }
         let generator = UIImpactFeedbackGenerator(style: .medium)
         generator.impactOccurred()
 
@@ -227,10 +231,10 @@ extension JobCollectionViewCell {
             animations: {
                 if sender.tintColor == .unfilledHeart {
                     sender.tintColor = .tappedButton
-                    self.favoriteDelegate.favoriteButtonTapped(at: self.indexPath)
+                    favoriteDelegate.favoriteButtonTapped(at: indexPath)
                 } else {
                     sender.tintColor = .unfilledHeart
-                    self.favoriteDelegate.favoriteButtonUnTapped(at: self.indexPath)
+                    favoriteDelegate.favoriteButtonUnTapped(at: indexPath)
                 }
                 sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             },

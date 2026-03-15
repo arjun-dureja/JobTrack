@@ -44,7 +44,7 @@ class AddJobViewController: UIViewController {
     let logoImageView = UIImageView()
     let logoActivityIndicator = UIActivityIndicatorView()
 
-    let clearbitLink = UIButton(type: .system)
+    let logoDevLink = UIButton(type: .system)
 
     weak var jobDelegate: AddJobDelegate!
 
@@ -242,10 +242,10 @@ class AddJobViewController: UIViewController {
         setupButton(for: cancelButton, name: "CANCEL")
         cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
 
-        clearbitLink.translatesAutoresizingMaskIntoConstraints = false
-        clearbitLink.setTitle("Logos provided by Clearbit", for: .normal)
-        clearbitLink.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        clearbitLink.addTarget(self, action: #selector(clearbitTapped), for: .touchUpInside)
+        logoDevLink.translatesAutoresizingMaskIntoConstraints = false
+        logoDevLink.setTitle("Logos provided by Logo.dev", for: .normal)
+        logoDevLink.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        logoDevLink.addTarget(self, action: #selector(logoDevTapped), for: .touchUpInside)
     }
 
     func layout() {
@@ -257,7 +257,7 @@ class AddJobViewController: UIViewController {
         scrollView.addSubview(dateField)
         scrollView.addSubview(addJobButton)
         scrollView.addSubview(cancelButton)
-        scrollView.addSubview(clearbitLink)
+        scrollView.addSubview(logoDevLink)
 
         headerView.addSubview(logoImageView)
         headerView.addSubview(logoActivityIndicator)
@@ -353,8 +353,8 @@ class AddJobViewController: UIViewController {
 
             cancelButton.heightAnchor.constraint(equalToConstant: 60),
 
-            clearbitLink.topAnchor.constraint(equalTo: cancelButton.bottomAnchor, constant: 25),
-            clearbitLink.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
+            logoDevLink.topAnchor.constraint(equalTo: cancelButton.bottomAnchor, constant: 25),
+            logoDevLink.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
 
         ])
     }
@@ -464,8 +464,8 @@ extension AddJobViewController {
         dismiss(animated: true)
     }
 
-    @objc func clearbitTapped() {
-        if let url = URL(string: "https://clearbit.com"), !url.absoluteString.isEmpty {
+    @objc func logoDevTapped() {
+        if let url = URL(string: "https://logo.dev"), !url.absoluteString.isEmpty {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }

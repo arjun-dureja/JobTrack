@@ -150,7 +150,7 @@ class JobStatsViewController: UIViewController {
             dataSetColors.append(colors[i])
         }
 
-        let dataSet = PieChartDataSet(entries: entries, label: nil)
+        let dataSet = PieChartDataSet(entries: entries, label: "")
         dataSet.colors = dataSetColors
 
         let formatter = NumberFormatter()
